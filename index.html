@@ -7,7 +7,7 @@
     <style>
         /* =========================================
            CSS TEMA PREMIUM - CLARO E ESCURO DINÂMICO
-           Hardware Accelerated & Glassmorphism Expandido
+           Hardware Accelerated & Glassmorphism Mantido Intacto
            ========================================= */
         :root {
             /* Variáveis do Modo Claro (Padrão) */
@@ -114,7 +114,7 @@
             box-shadow: 0 15px 35px rgba(251, 191, 36, 0.2);
         }
 
-        /* Animação Clássica de Entrada Triunfal Intocada */
+        /* Animação Clássica de Entrada Triunfal */
         @keyframes entradaTriunfal {
             0% {
                 opacity: 0;
@@ -252,7 +252,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 3rem;
-            /* Otimização de renderização pesada */
             content-visibility: auto;
             contain-intrinsic-size: 1000px;
         }
@@ -277,7 +276,6 @@
             will-change: transform, box-shadow;
         }
 
-        /* Efeito de Reflexo de Vidro Premium */
         .game-card::before {
             content: '';
             position: absolute;
@@ -590,7 +588,7 @@
         <p>A Maior e Mais Bela Plataforma Imersiva da Web</p>
     </header>
 
-    <div class="games-counter" id="gamesCounter">Carregando catálogo com links livres anti-bloqueio...</div>
+    <div class="games-counter" id="gamesCounter">Carregando Catálogo Gigante...</div>
 
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título épico, categoria ou estilo...">
@@ -599,16 +597,16 @@
     <!-- Filtros Inteligentes Expandidos -->
     <div class="filters" id="filterContainer">
         <button class="filter-btn active" data-filter="all">Todos os 700 Jogos</button>
+        <button class="filter-btn" data-filter="friv">Friv & Click Jogos</button>
+        <button class="filter-btn" data-filter="fps">Ação & Luta</button>
+        <button class="filter-btn" data-filter="anime">Anime & Ninja</button>
         <button class="filter-btn" data-filter="aventura">Aventura</button>
-        <button class="filter-btn" data-filter="fps">Ação & FPS</button>
-        <button class="filter-btn" data-filter="anime">Anime & Luta</button>
-        <button class="filter-btn" data-filter="rpg">RPG</button>
-        <button class="filter-btn" data-filter="arcade">Arcade Clássico</button>
+        <button class="filter-btn" data-filter="rpg">RPG Clássico</button>
+        <button class="filter-btn" data-filter="arcade">Arcade & DOS</button>
         <button class="filter-btn" data-filter="moda">Roupas & Moda</button>
         <button class="filter-btn" data-filter="fogoagua">Fogo & Água</button>
         <button class="filter-btn" data-filter="puzzle">Quebra-Cabeça</button>
-        <button class="filter-btn" data-filter="io">Estratégia & .IO</button>
-        <button class="filter-btn" data-filter="friv">Friv Casual</button>
+        <button class="filter-btn" data-filter="io">.IO & Estratégia</button>
     </div>
 
     <div class="container" id="gamesContainer">
@@ -769,55 +767,44 @@
             animateParticles();
 
             // ==========================================
-            // NOVO BANCO DE DADOS: 700 JOGOS E NOVAS CATEGORIAS
-            // Base livre de bloqueio expandida: RPG, Aventura, Arcade
+            // NOVO BANCO DE DADOS: O OURO DO FRIV E CLICK JOGOS NO TOPO
+            // Estes são os Titan Hits. Eles aparecerão na primeira linha do site.
             // ==========================================
             const proxy = "https://wsrv.nl/?url=";
             
             const gamesDatabase = [
-                // === AVENTURA ===
-                { title: "Zelda Classic", icon: "🗡️", desc: "A lenda original. Explore masmorras e salve o reino de Hyrule.", url: "https://archive.org/embed/msdos_Zelda_Classic_2.10.0_2004", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1172470/header.jpg" },
-                { title: "Prince of Persia", icon: "🕌", desc: "A lenda de 1990! Salve a princesa enfrentando os guardas do castelo.", url: "https://archive.org/embed/msdos_Prince_of_Persia_1990", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/383150/header.jpg" },
-                { title: "Aladdin (1994)", icon: "🧞‍♂️", desc: "Aventure-se por Agrabah com sua espada e maçãs neste clássico de ouro.", url: "https://archive.org/embed/msdos_Disney_Aladdin_1994", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
-                
-                // === RPG ===
-                { title: "Ultima VI: Prophet", icon: "📜", desc: "Um dos maiores clássicos do RPG. Explore reinos, crie feitiços e converse com NPCs.", url: "https://archive.org/embed/msdos_Ultima_VI_-_The_False_Prophet_1990", cat: "rpg", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg" },
+                // TITAN HITS - Estes aparecerão no topo exato da tela.
+                { title: "Om Nom Run", icon: "🐸", desc: "A famosa lenda! Corra, pule e desvie ao melhor estilo Cut the Rope.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" },
+                { title: "Subway Surfers Clone", icon: "🛹", desc: "Clássico absoluto! Deslize sobre trens e fuja do inspetor rabugento.", url: "https://gamesnacks.com/embed/games/trainsurfers", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
+                { title: "Bounce Masters (Yeti)", icon: "🐧", desc: "Calcule a força e arremesse o pinguim! Nostalgia pura da era Yeti Sports.", url: "https://gamesnacks.com/embed/games/bouncemasters", cat: "friv", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-3-ice-temple/cover-1586285189392.png" },
+                { title: "Bubble Shooter Classic", icon: "🔵", desc: "O estourador de bolhas mais viciante da internet.", url: "https://gamesnacks.com/embed/games/bubblewoods", cat: "friv", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
+                { title: "Aladdin Original", icon: "🧞‍♂️", desc: "O clássico do Super Nintendo e Mega Drive. Explore Agrabah!", url: "https://archive.org/embed/msdos_Disney_Aladdin_1994", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg" },
+                { title: "Mortal Kombat", icon: "🐉", desc: "Scorpion vs Sub-Zero. O jogo de luta que marcou uma geração.", url: "https://archive.org/embed/msdos_Mortal_Kombat_1993", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg" },
+                { title: "Tower Crash 3D", icon: "💣", desc: "Use a física para explodir e derrubar blocos coloridos.", url: "https://gamesnacks.com/embed/games/towercrash3d", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/310560/header.jpg" },
+                { title: "Traffic Run", icon: "🏎️", desc: "Atravesse rodovias lotadas sem bater o carro neste hit casual.", url: "https://gamesnacks.com/embed/games/trafficrun", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/212480/header.jpg" },
+                { title: "Super Street Fighter II", icon: "🥋", desc: "Hadouken! Jogue com Ryu, Ken e Chun-Li no maior torneio do mundo.", url: "https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/349040/header.jpg" },
+                { title: "Pac-Man Retro", icon: "🟡", desc: "Fuja dos fantasmas e limpe o labirinto no maior clássico dos fliperamas.", url: "https://archive.org/embed/msdos_Pac-Man_1983", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/17390/header.jpg" },
+                { title: "Donkey Kong Classic", icon: "🦍", desc: "Pule os barris e salve a princesa da fúria do macaco gigante.", url: "https://archive.org/embed/msdos_Donkey_Kong_1981", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/4000/header.jpg" },
+                { title: "2048 Oficial", icon: "🧩", desc: "Deslize as peças, some os números e alcance o cobiçado bloco 2048.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/518060/header.jpg" },
+                { title: "Tetris Original", icon: "🧱", desc: "O quebra-cabeça soviético perfeito. Encaixe os blocos e faça linhas.", url: "https://archive.org/embed/msdos_Tetris_1986", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" },
+                { title: "Candy Fiesta", icon: "🍬", desc: "Junte 3 doces e faça o tabuleiro explodir em cores no estilo Candy Crush.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "moda", cover: proxy + "images.crazygames.com/fashion-stylist/cover-1681223963784.png" },
+                { title: "Zelda Classic", icon: "🗡️", desc: "A lenda original de Hyrule. Pegue sua espada e explore as masmorras.", url: "https://archive.org/embed/msdos_Zelda_Classic_2.10.0_2004", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1172470/header.jpg" },
+                { title: "DOOM", icon: "😈", desc: "O pai dos jogos de tiro. Elimine as forças do mal nesta base isolada.", url: "https://archive.org/embed/msdos_Doom_1993", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/2280/header.jpg" },
+
+                // === CONTINUAÇÃO DO CATÁLOGO ===
+                { title: "Prince of Persia", icon: "🕌", desc: "Vença os perigos do castelo em gráficos clássicos impecáveis.", url: "https://archive.org/embed/msdos_Prince_of_Persia_1990", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/383150/header.jpg" },
+                { title: "Ultima VI: Prophet", icon: "📜", desc: "Um dos maiores clássicos do RPG. Explore reinos e forje seu destino.", url: "https://archive.org/embed/msdos_Ultima_VI_-_The_False_Prophet_1990", cat: "rpg", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg" },
                 { title: "Rogue Dungeons", icon: "🧝‍♂️", desc: "O RPG que criou o gênero Roguelike. Desça nas masmorras infinitas.", url: "https://archive.org/embed/msdos_Rogue_1983", cat: "rpg", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" },
-
-                // === ARCADE ===
-                { title: "Donkey Kong (1981)", icon: "🦍", desc: "Escale as vigas, pule os barris e salve Pauline na primeira aparição de Mario.", url: "https://archive.org/embed/msdos_Donkey_Kong_1981", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/4000/header.jpg" },
-                { title: "Tetris Original", icon: "🧱", desc: "O quebra-cabeça soviético que dominou o mundo. Encaixe os blocos perfeitamente.", url: "https://archive.org/embed/msdos_Tetris_1986", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" },
-
-                // === AÇÃO E FPS ===
-                { title: "DOOM II: Hell on Earth", icon: "🔫", desc: "O lendário FPS original. Pegue sua espingarda e limpe a base de Marte.", url: "https://archive.org/embed/msdos_Doom_II_-_Hell_on_Earth_1994", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/2280/header.jpg" },
-                { title: "Mortal Kombat (1993)", icon: "🐉", desc: "Scorpion, Sub-Zero e fatalities brutais no clássico absoluto da luta.", url: "https://archive.org/embed/msdos_Mortal_Kombat_1993", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg" },
-                { title: "Traffic Run", icon: "🏎️", desc: "Pise no acelerador e desvie no trânsito frenético de uma cidade perigosa.", url: "https://gamesnacks.com/embed/games/trafficrun", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/212480/header.jpg" },
-                
-                // === ANIME E MAGIA ===
-                { title: "Super Street Fighter II", icon: "🥷", desc: "Escolha Ryu, Ken ou Chun-Li no maior torneio de artes marciais de anime.", url: "https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/349040/header.jpg" },
-                { title: "Samurai Showdown Web", icon: "⚔️", desc: "Mergulhe no Japão feudal e cruze lâminas como um samurai verdadeiro.", url: "https://archive.org/embed/msdos_Samurai_Shodown_1995", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1058450/header.jpg" },
-                { title: "Color Pixel Art Kawaii", icon: "🧙‍♀️", desc: "Pinte heróis e personagens de anime pixel por pixel de forma relaxante.", url: "https://gamesnacks.com/embed/games/colorpixelartclassic", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1158690/header.jpg" },
-                
-                // === CARTAS E PUZZLES ===
-                { title: "2048 Oficial", icon: "🧩", desc: "Deslize as peças, faça a matemática mental e alcance o lendário bloco 2048.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/518060/header.jpg" },
+                { title: "Samurai Showdown Web", icon: "⚔️", desc: "Mergulhe no Japão feudal e cruze lâminas como um ninja de anime.", url: "https://archive.org/embed/msdos_Samurai_Shodown_1995", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1058450/header.jpg" },
+                { title: "Color Pixel Art Kawaii", icon: "🎨", desc: "Pinte heróis e personagens de anime pixel por pixel de forma relaxante.", url: "https://gamesnacks.com/embed/games/colorpixelartclassic", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1158690/header.jpg" },
                 { title: "Chess Classic", icon: "♟️", desc: "Jogue xadrez tático contra a máquina em diferentes níveis de dificuldade.", url: "https://gamesnacks.com/embed/games/chessclassic", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
-
-                // === FOGO E ÁGUA / CASUAL ===
-                { title: "Bubble Woods", icon: "🔥", desc: "Estoure as bolhas mágicas na floresta atirando no ângulo perfeito.", url: "https://gamesnacks.com/embed/games/bubblewoods", cat: "fogoagua", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
-                
-                // === MODA E ROUPAS ===
-                { title: "Candy Fiesta", icon: "👗", desc: "Combine cores brilhantes e enfeites numa explosão visual no estilo Fashion.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "moda", cover: proxy + "images.crazygames.com/fashion-stylist/cover-1681223963784.png" },
-                
-                // === ESTRATÉGIA E IO ===
-                { title: "Pac-Man Arcade", icon: "🦠", desc: "O labirinto clássico! Fuja dos fantasmas e limpe o tabuleiro freneticamente.", url: "https://archive.org/embed/msdos_Pac-Man_1983", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/17390/header.jpg" },
+                { title: "Jewel Block", icon: "💎", desc: "Encaixe jóias reluzentes e diamantes brutos em uma vitrine luxuosa.", url: "https://gamesnacks.com/embed/games/jewelblockpuzzle", cat: "moda", cover: proxy + "images.crazygames.com/games/fashion-show/cover-1667468160410.png" },
                 { title: "SimCity 2000", icon: "🏙️", desc: "Seja o prefeito, construa estradas e administre a maior metrópole pixelada.", url: "https://archive.org/embed/msdos_SimCity_2000_1993", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/289070/header.jpg" },
-                
-                // === FRIV ===
-                { title: "Om Nom Run", icon: "🏃", desc: "Corra, desvie de obstáculos e colete moedas com o famoso Om Nom.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" }
+                { title: "Hextris Global", icon: "🕹️", desc: "Um tetris hexagonal brutalmente rápido. Sobreviva rotacionando a base.", url: "https://hextris.io/", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
             ];
 
             // ==========================================
-            // MOTOR PROCEDURAL: GERANDO 700 LINKS ABERTOS E FAMOSOS
+            // MOTOR PROCEDURAL: PREENCHENDO ATÉ 700 LINKS ABERTOS E SEGUROS
             // ==========================================
             const imageLibrary = [
                 "730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520", "322170", 
@@ -832,9 +819,9 @@
             const validLinks = {
                 aventura: ["https://archive.org/embed/msdos_Zelda_Classic_2.10.0_2004", "https://archive.org/embed/msdos_Prince_of_Persia_1990", "https://gamesnacks.com/embed/games/omnomrun"],
                 rpg: ["https://archive.org/embed/msdos_Ultima_VI_-_The_False_Prophet_1990", "https://archive.org/embed/msdos_Rogue_1983"],
-                arcade: ["https://archive.org/embed/msdos_Donkey_Kong_1981", "https://archive.org/embed/msdos_Tetris_1986"],
-                fps: ["https://gamesnacks.com/embed/games/towercrash3d", "https://gamesnacks.com/embed/games/trafficrun", "https://archive.org/embed/msdos_Doom_II_-_Hell_on_Earth_1994", "https://archive.org/embed/msdos_Mortal_Kombat_1993"],
-                io: ["https://archive.org/embed/msdos_Pac-Man_1983", "https://hextris.io/", "https://archive.org/embed/msdos_SimCity_2000_1993"],
+                arcade: ["https://archive.org/embed/msdos_Donkey_Kong_1981", "https://archive.org/embed/msdos_Tetris_1986", "https://archive.org/embed/msdos_Pac-Man_1983"],
+                fps: ["https://gamesnacks.com/embed/games/towercrash3d", "https://gamesnacks.com/embed/games/trafficrun", "https://archive.org/embed/msdos_Doom_1993", "https://archive.org/embed/msdos_Mortal_Kombat_1993"],
+                io: ["https://hextris.io/", "https://archive.org/embed/msdos_SimCity_2000_1993"],
                 puzzle: ["https://gabrielecirulli.github.io/2048/", "https://gamesnacks.com/embed/games/chessclassic", "https://gamesnacks.com/embed/games/elementblocks"],
                 anime: ["https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", "https://archive.org/embed/msdos_Samurai_Shodown_1995", "https://gamesnacks.com/embed/games/colorpixelartclassic"],
                 moda: ["https://gamesnacks.com/embed/games/candyfiesta", "https://gamesnacks.com/embed/games/jewelblockpuzzle"],
@@ -845,7 +832,7 @@
             const catPool = ["aventura", "rpg", "arcade", "fps", "io", "puzzle", "anime", "moda", "fogoagua", "friv"];
 
             let count = gamesDatabase.length;
-            // ESCALA TOTAL PARA 700 JOGOS
+            // PREENCHE ATÉ CHEGAR EM 700 JOGOS
             while (count < 700) {
                 const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
                 const nou = nouns[Math.floor(Math.random() * nouns.length)];
@@ -858,31 +845,31 @@
                 const randomImageId = imageLibrary[count % imageLibrary.length];
 
                 let icon = "🎮";
-                let desc = "Aventura digital livre de bloqueios para você jogar o dia todo.";
+                let desc = "Diversão instantânea direto do seu navegador, sem travamentos.";
                 let coverGenerated = proxy + `cdn.akamai.steamstatic.com/steam/apps/${randomImageId}/header.jpg`;
 
                 if(randomCat === 'fps') { 
-                    icon = "🔫"; desc = "Sobreviva ao campo de batalha, atire e elimine seus inimigos na arena."; 
+                    icon = "🔫"; desc = "Ação intensa. Sobreviva ao campo de batalha, atire e elimine seus inimigos."; 
                 } else if(randomCat === 'io') { 
-                    icon = "🌐"; desc = "Conquiste território, bata os recordes e sobreviva neste ambiente clássico."; 
+                    icon = "🌐"; desc = "Conquiste território, bata recordes mundiais e domine o servidor."; 
                 } else if(randomCat === 'anime') { 
-                    icon = "⚔️"; desc = "Lute como os maiores heróis de anime e mangá nesta plataforma nostálgica."; 
+                    icon = "⚔️"; desc = "Lute como os maiores ninjas e heróis das sagas de anime japonesas."; 
                 } else if(randomCat === 'moda') { 
-                    icon = "👗"; desc = "Combine peças luxuosas, cores fortes e vitrines deslumbrantes."; 
+                    icon = "👗"; desc = "Estilo puro. Combine pedras preciosas, cores e crie o painel perfeito."; 
                     coverGenerated = proxy + "images.crazygames.com/fashion-stylist/cover-1681223963784.png";
                 } else if(randomCat === 'fogoagua') { 
-                    icon = "🔥💧"; desc = "Explore mecânicas de física fantásticas e elementos da natureza de forma casual."; 
+                    icon = "🔥💧"; desc = "Use elementos da natureza e a física para avançar nos labirintos casuais."; 
                     coverGenerated = proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png";
                 } else if(randomCat === 'puzzle') { 
-                    icon = "🧩"; desc = "Treine seu cérebro, junte os blocos certos e solucione os enigmas da web."; 
+                    icon = "🧩"; desc = "Treine sua lógica, mova as peças certas e alcance a vitória cerebral."; 
                 } else if(randomCat === 'friv') { 
-                    icon = "🕹️"; desc = "O mais puro suco da nostalgia. Jogo clássico estilo Flash direto do navegador."; 
+                    icon = "🕹️"; desc = "A nostalgia do Friv e Click Jogos. Casual, rápido e extremamente viciante."; 
                 } else if(randomCat === 'aventura') {
-                    icon = "🗺️"; desc = "Descubra tesouros perdidos e embarque em uma jornada épica pelo mapa.";
+                    icon = "🗺️"; desc = "Pegue sua espada, encare masmorras secretas e salve o reino lendário.";
                 } else if(randomCat === 'rpg') {
-                    icon = "📜"; desc = "Evolua suas habilidades, crie feitiços poderosos e converse com viajantes.";
+                    icon = "📜"; desc = "Descubra tesouros perdidos, evolua sua classe e derrote dragões ocultos.";
                 } else if(randomCat === 'arcade') {
-                    icon = "🕹️"; desc = "Fichas infinitas. Tente bater a pontuação mais alta neste clássico de fliperama.";
+                    icon = "🕹️"; desc = "Clima de Fliperama dos anos 90. Fichas infinitas para bater a melhor pontuação.";
                 }
 
                 gamesDatabase.push({
@@ -900,27 +887,26 @@
             const gamesCounter = document.getElementById('gamesCounter');
 
             // ==========================================
-            // OTIMIZAÇÃO DE RENDERIZAÇÃO PARA 700 ITENS (Limite de Animação)
+            // OTIMIZAÇÃO DE RENDERIZAÇÃO: DOM Fragment Pattern
             // ==========================================
             function renderGames(games) {
-                gamesCounter.textContent = `${games.length} Jogos Prontos (Catálogo Expandido e Seguro)`;
+                gamesCounter.textContent = `${games.length} Jogos Famosos Prontos (Catálogo Nostálgico Seguro)`;
                 let htmlString = '';
 
                 games.forEach((game, index) => {
-                    // Limita o atraso máximo de animação para não sobrecarregar o render de 700 itens
                     const delay = Math.min(index, 30) * 0.05; 
                     
                     let catLabel = 'Casual';
                     if(game.cat === 'fps') catLabel = 'Ação & Luta';
                     else if(game.cat === 'io') catLabel = 'Estratégia IO';
-                    else if(game.cat === 'anime') catLabel = 'Anime & Retro';
-                    else if(game.cat === 'fogoagua') catLabel = 'Elementos';
-                    else if(game.cat === 'moda') catLabel = 'Moda';
+                    else if(game.cat === 'anime') catLabel = 'Anime & Ninja';
+                    else if(game.cat === 'fogoagua') catLabel = 'Fogo & Água';
+                    else if(game.cat === 'moda') catLabel = 'Moda & Cores';
                     else if(game.cat === 'puzzle') catLabel = 'Puzzle';
-                    else if(game.cat === 'friv') catLabel = 'Friv';
+                    else if(game.cat === 'friv') catLabel = 'Friv Hits';
                     else if(game.cat === 'aventura') catLabel = 'Aventura';
                     else if(game.cat === 'rpg') catLabel = 'RPG Classic';
-                    else if(game.cat === 'arcade') catLabel = 'Arcade';
+                    else if(game.cat === 'arcade') catLabel = 'Fliperama';
 
                     htmlString += `
                         <div class="game-card" data-title="${game.title}" data-url="${game.url}" data-cat="${game.cat}" style="animation-delay: ${delay}s">
