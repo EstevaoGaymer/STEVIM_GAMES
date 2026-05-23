@@ -6,18 +6,34 @@
     <title>STEVIN GAMES - 500 Jogos Premium</title>
     <style>
         /* =========================================
-           CSS TEMA CLARO PREMIUM - HARDWARE ACCELERATED
-           Todas as animações e estilos originais mantidos
+           CSS TEMA PREMIUM - CLARO E ESCURO DINÂMICO
+           Hardware Accelerated & Glassmorphism Mantido
            ========================================= */
         :root {
+            /* Variáveis do Modo Claro (Padrão) */
             --bg-color: #f0f4f8; 
             --surface-color: rgba(255, 255, 255, 0.75); 
-            --primary-accent: #4F46E5; 
-            --secondary-accent: #EC4899; 
+            --primary-accent: #4F46E5; /* Índigo */
+            --secondary-accent: #EC4899; /* Rosa */
             --text-main: #0f172a; 
             --text-muted: #475569; 
             --glass-border: rgba(255, 255, 255, 0.9);
+            --bg-gradient: radial-gradient(circle at top center, #ffffff 0%, #e2e8f0 100%);
+            --shadow-color: rgba(0, 0, 0, 0.08);
             --transition-speed: 0.4s;
+        }
+
+        /* Variáveis do Modo Escuro Premium (Ouro/Realeza) */
+        body.dark-mode {
+            --bg-color: #0f172a; 
+            --surface-color: rgba(15, 23, 42, 0.75); 
+            --primary-accent: #fbbf24; /* Ouro Nobre */
+            --secondary-accent: #f59e0b; /* Âmbar Escuro */
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-gradient: radial-gradient(circle at top center, #1e293b 0%, #020617 100%);
+            --shadow-color: rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -33,24 +49,25 @@
             width: 12px;
         }
         ::-webkit-scrollbar-track {
-            background: #e2e8f0;
+            background: var(--bg-color);
         }
         ::-webkit-scrollbar-thumb {
-            background: #94a3b8;
+            background: var(--text-muted);
             border-radius: 6px;
-            border: 3px solid #e2e8f0;
+            border: 3px solid var(--bg-color);
         }
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-accent);
         }
 
         body {
-            background: radial-gradient(circle at top center, #ffffff 0%, #e2e8f0 100%);
+            background: var(--bg-gradient);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
             background-attachment: fixed;
             position: relative;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
         #particles-canvas {
@@ -64,7 +81,40 @@
             will-change: transform, opacity;
         }
 
-        /* Animação Clássica de Entrada Triunfal Intocada e Perfeita */
+        /* Botão de Tema Luxuoso */
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            background: var(--surface-color);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--primary-accent);
+            color: var(--primary-accent);
+            box-shadow: 0 15px 35px rgba(251, 191, 36, 0.2);
+        }
+
+        /* Animação Clássica de Entrada Triunfal Intocada */
         @keyframes entradaTriunfal {
             0% {
                 opacity: 0;
@@ -78,8 +128,7 @@
 
         header {
             text-align: center;
-            padding: 6rem 2rem 3rem 2rem;
-            background: radial-gradient(circle at top, rgba(79, 70, 229, 0.05) 0%, transparent 70%);
+            padding: 7rem 2rem 3rem 2rem;
             animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             will-change: transform, opacity;
         }
@@ -93,9 +142,10 @@
             text-transform: uppercase;
             letter-spacing: 8px;
             margin-bottom: 1rem;
-            text-shadow: 0 15px 35px rgba(79, 70, 229, 0.2);
+            text-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             position: relative;
             display: inline-block;
+            transition: all var(--transition-speed) ease;
         }
 
         p {
@@ -103,6 +153,7 @@
             font-size: 1.4rem;
             letter-spacing: 1.5px;
             font-weight: 500;
+            transition: color var(--transition-speed) ease;
         }
 
         .search-container {
@@ -120,26 +171,26 @@
             max-width: 650px;
             border-radius: 50px;
             border: 2px solid var(--glass-border);
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: var(--surface-color);
             color: var(--text-main);
             font-size: 1.15rem;
             outline: none;
             transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+            box-shadow: 0 15px 35px var(--shadow-color);
             font-weight: 500;
         }
 
         .search-input::placeholder {
-            color: #94a3b8;
+            color: var(--text-muted);
         }
 
         .search-input:focus {
             border-color: var(--primary-accent);
-            box-shadow: 0 0 30px rgba(79, 70, 229, 0.25);
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
             transform: scale(1.03) translateY(-2px);
-            background-color: #ffffff;
+            background-color: var(--bg-color);
         }
 
         .filters {
@@ -157,7 +208,7 @@
         }
 
         .filter-btn {
-            background: rgba(255, 255, 255, 0.8);
+            background: var(--surface-color);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 2px solid var(--glass-border);
@@ -170,11 +221,11 @@
             letter-spacing: 1.2px;
             text-transform: uppercase;
             font-size: 0.95rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+            box-shadow: 0 5px 20px var(--shadow-color);
         }
 
         .filter-btn:hover {
-            background: rgba(79, 70, 229, 0.1);
+            background: rgba(251, 191, 36, 0.1);
             color: var(--primary-accent);
             border-color: var(--primary-accent);
             transform: translateY(-3px);
@@ -182,9 +233,9 @@
 
         .filter-btn.active {
             background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
-            color: #ffffff;
+            color: #ffffff; /* Sempre branco no botão ativo para contraste */
             border-color: transparent;
-            box-shadow: 0 12px 25px rgba(79, 70, 229, 0.35);
+            box-shadow: 0 12px 25px rgba(251, 191, 36, 0.35);
             transform: translateY(-3px) scale(1.05);
         }
 
@@ -201,7 +252,7 @@
             background-color: var(--surface-color);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 1);
+            border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 0; 
             text-align: center;
@@ -213,7 +264,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 15px 35px var(--shadow-color);
             will-change: transform, box-shadow;
         }
 
@@ -222,8 +273,8 @@
             height: 200px;
             position: relative;
             overflow: hidden;
-            background-color: #0f172a;
-            border-bottom: 4px solid rgba(79, 70, 229, 0.1);
+            background-color: #000;
+            border-bottom: 4px solid var(--primary-accent);
         }
 
         .game-cover img {
@@ -240,22 +291,22 @@
             flex-direction: column;
             flex-grow: 1;
             justify-content: space-between;
-            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 100%);
+            background: linear-gradient(to bottom, transparent 0%, var(--surface-color) 100%);
         }
 
         .category-tag {
             position: absolute;
             top: 18px;
             right: -40px;
-            background: linear-gradient(90deg, var(--secondary-accent), #f43f5e);
+            background: linear-gradient(90deg, var(--secondary-accent), var(--primary-accent));
             color: #ffffff;
             font-size: 0.8rem;
-            font-weight: 800;
+            font-weight: 900;
             padding: 8px 45px;
             transform: rotate(45deg);
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             z-index: 10;
         }
 
@@ -275,9 +326,8 @@
 
         .game-card:hover {
             transform: translateY(-18px) scale(1.03);
-            border-color: rgba(255, 255, 255, 1);
-            box-shadow: 0 30px 60px rgba(79, 70, 229, 0.18), inset 0 0 30px rgba(255, 255, 255, 0.8);
-            background-color: rgba(255, 255, 255, 0.98);
+            border-color: var(--primary-accent);
+            box-shadow: 0 30px 60px var(--shadow-color), inset 0 0 30px rgba(255, 255, 255, 0.1);
         }
 
         .game-card:hover .game-cover img {
@@ -316,12 +366,12 @@
         }
 
         .btn-play {
-            background-color: rgba(79, 70, 229, 0.08);
+            background-color: transparent;
             color: var(--primary-accent);
-            border: 2px solid rgba(79, 70, 229, 0.3);
+            border: 2px solid var(--primary-accent);
             padding: 1.2rem 2.5rem;
             font-size: 1.05rem;
-            font-weight: 800;
+            font-weight: 900;
             border-radius: 12px;
             cursor: pointer;
             transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -336,10 +386,13 @@
 
         .btn-play:hover {
             background-color: var(--primary-accent);
-            color: #ffffff;
-            border-color: var(--primary-accent);
-            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
+            color: #0f172a; /* Texto escuro no botão para brilhar no ouro */
+            box-shadow: 0 15px 30px rgba(251, 191, 36, 0.4);
             transform: translateY(-2px);
+        }
+
+        body:not(.dark-mode) .btn-play:hover {
+            color: #ffffff; /* Texto branco no modo claro */
         }
 
         /* Modal Focado em Imersão e Desempenho */
@@ -369,7 +422,7 @@
             text-align: center;
             position: relative;
             animation: entradaTriunfal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            box-shadow: 0 0 100px rgba(79, 70, 229, 0.4);
+            box-shadow: 0 0 100px var(--primary-accent);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -448,7 +501,7 @@
             opacity: 0;
             text-align: center;
             text-transform: uppercase;
-            text-shadow: 0 5px 15px rgba(79, 70, 229, 0.15);
+            text-shadow: 0 5px 15px var(--shadow-color);
             will-change: transform, opacity;
         }
 
@@ -498,6 +551,10 @@
 </head>
 <body>
 
+    <button id="themeToggle" class="theme-toggle">
+        <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
+    </button>
+
     <canvas id="particles-canvas"></canvas>
 
     <header>
@@ -544,8 +601,31 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // ==========================================
-            // SISTEMA DE PARTÍCULAS INTERATIVAS (Preservado e Otimizado)
-            // Pausa quando o jogo abre para entregar 100% da GPU ao jogo
+            // SISTEMA DE THEME TOGGLE (CLARO E ESCURO)
+            // ==========================================
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                
+                themeIcon.textContent = isDark ? '☀️' : '🌙';
+                themeText.textContent = isDark ? 'Modo Claro' : 'Modo Escuro';
+                
+                // Mágica nas partículas: Elas viram Ouro no modo escuro!
+                particlesArray.forEach(p => {
+                    if (isDark) {
+                        p.color = Math.random() > 0.5 ? '#fbbf24' : '#f59e0b'; // Tons de Ouro/Âmbar
+                    } else {
+                        p.color = Math.random() > 0.5 ? '#4F46E5' : '#EC4899'; // Tons Índigo/Rosa
+                    }
+                });
+            });
+
+            // ==========================================
+            // SISTEMA DE PARTÍCULAS INTERATIVAS (Otimizado)
             // ==========================================
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
@@ -606,13 +686,19 @@
             function initParticles() {
                 particlesArray = [];
                 let numberOfParticles = (canvas.height * canvas.width) / 10000; 
+                const isDark = document.body.classList.contains('dark-mode');
+
                 for (let i = 0; i < numberOfParticles; i++) {
                     let size = (Math.random() * 3) + 1;
                     let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
                     let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
                     let directionX = (Math.random() * 0.8) - 0.4;
                     let directionY = (Math.random() * 0.8) - 0.4;
-                    let color = Math.random() > 0.5 ? '#4F46E5' : '#EC4899'; 
+                    
+                    let color = isDark 
+                        ? (Math.random() > 0.5 ? '#fbbf24' : '#f59e0b') 
+                        : (Math.random() > 0.5 ? '#4F46E5' : '#EC4899'); 
+
                     particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
                 }
             }
@@ -630,13 +716,17 @@
 
             function connectParticles() {
                 let opacityValue = 1;
+                // Pega a cor baseada no tema para as linhas conectoras
+                const isDark = document.body.classList.contains('dark-mode');
+                const rgbColor = isDark ? '251, 191, 36' : '79, 70, 229';
+
                 for (let a = 0; a < particlesArray.length; a++) {
                     for (let b = a; b < particlesArray.length; b++) {
                         let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
                             + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
                         if (distance < (canvas.width / 9) * (canvas.height / 9)) {
                             opacityValue = 1 - (distance / 18000);
-                            ctx.strokeStyle = 'rgba(79, 70, 229,' + opacityValue * 0.2 + ')';
+                            ctx.strokeStyle = `rgba(${rgbColor}, ${opacityValue * 0.2})`;
                             ctx.lineWidth = 1.2;
                             ctx.beginPath();
                             ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
@@ -650,35 +740,33 @@
             animateParticles();
 
             // ==========================================
-            // NOVO BANCO DE DADOS: A PROVA DE FALHAS (VERCEL SAFE)
-            // Utilizando o GameSnacks (by Google), Archive.org (MS-DOS Retro)
-            // e repositórios abertos (GitHub Pages). 
-            // Eles foram construídos especificamente para NÃO bloquear iframes!
-            // Proxy wsrv.nl ativo para evitar falhas nas imagens!
+            // NOVO BANCO DE DADOS: FAMOSOS, ANIME E LIVRES (A PROVA DE BLOQUEIO)
             // ==========================================
             const proxy = "https://wsrv.nl/?url=";
             
             const gamesDatabase = [
-                // === CLÁSSICOS & FRIV (Retro Layer & GameSnacks) ===
-                { title: "Om Nom Run", icon: "🏃", desc: "Corra, desvie de obstáculos e colete moedas nas ruas da cidade.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" },
-                { title: "Prince of Persia (Classic)", icon: "🗡️", desc: "A lenda original de 1990! Salve a princesa enfrentando os guardas do castelo.", url: "https://archive.org/embed/msdos_Prince_of_Persia_1990", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/383150/header.jpg" },
-                { title: "Train Surfers", icon: "🛹", desc: "Estilo Friv autêntico! Deslize sobre trens e fuja do inspetor rabugento.", url: "https://gamesnacks.com/embed/games/trainsurfers", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
+                // === FAMOSOS & FRIV (Retro Layer & GameSnacks) ===
+                { title: "Om Nom Run", icon: "🏃", desc: "Corra, desvie de obstáculos e colete moedas com o famoso Om Nom.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" },
+                { title: "Prince of Persia (Classic)", icon: "🗡️", desc: "A lenda de 1990! Salve a princesa enfrentando os guardas do castelo.", url: "https://archive.org/embed/msdos_Prince_of_Persia_1990", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/383150/header.jpg" },
+                { title: "Aladdin (1994)", icon: "🧞‍♂️", desc: "Aventure-se por Agrabah com sua espada e maçãs neste clássico de ouro.", url: "https://archive.org/embed/msdos_Disney_Aladdin_1994", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
+                { title: "Tomb Raider (1996)", icon: "🧗‍♀️", desc: "Explore catacumbas secretas com Lara Croft no jogo original em 3D.", url: "https://archive.org/embed/msdos_Tomb_Raider_1996", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg" },
+                { title: "Train Surfers", icon: "🛹", desc: "Estilo Friv autêntico! Deslize sobre trens e fuja do inspetor rabugento.", url: "https://gamesnacks.com/embed/games/trainsurfers", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/620/header.jpg" },
 
                 // === AÇÃO E FPS ===
-                { title: "DOOM (1993)", icon: "🔫", desc: "O pai de todos os FPS. Pegue sua arma e sobreviva ao inferno em Marte.", url: "https://archive.org/embed/msdos_Doom_1993", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/2280/header.jpg" },
-                { title: "Tower Crash 3D", icon: "💣", desc: "Atire esferas destrutivas e derrube as maiores torres de blocos com física 3D.", url: "https://gamesnacks.com/embed/games/towercrash3d", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg" },
-                { title: "Traffic Run", icon: "🏎️", desc: "Pise no acelerador e desvie no trânsito frenético de uma cidade perigosa.", url: "https://gamesnacks.com/embed/games/trafficrun", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/310560/header.jpg" },
-                { title: "Retro Drift", icon: "🚗", desc: "Domine as curvas perfeitas neste simulador de corrida arcade eletrizante.", url: "https://gamesnacks.com/embed/games/retrodrift", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/212480/header.jpg" },
+                { title: "DOOM II: Hell on Earth", icon: "🔫", desc: "O lendário FPS original. Pegue sua espingarda e limpe a base de Marte.", url: "https://archive.org/embed/msdos_Doom_II_-_Hell_on_Earth_1994", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/2280/header.jpg" },
+                { title: "Mortal Kombat (1993)", icon: "🐉", desc: "Scorpion, Sub-Zero e fatalities brutais no clássico absoluto da luta.", url: "https://archive.org/embed/msdos_Mortal_Kombat_1993", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg" },
+                { title: "Tower Crash 3D", icon: "💣", desc: "Atire esferas destrutivas e derrube as maiores torres de blocos com física 3D.", url: "https://gamesnacks.com/embed/games/towercrash3d", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/310560/header.jpg" },
+                { title: "Traffic Run", icon: "🏎️", desc: "Pise no acelerador e desvie no trânsito frenético de uma cidade perigosa.", url: "https://gamesnacks.com/embed/games/trafficrun", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/212480/header.jpg" },
                 
                 // === ANIME E MAGIA ===
-                { title: "Street Fighter II", icon: "🥷", desc: "Escolha Ryu, Ken ou Chun-Li no maior torneio de artes marciais de todos os tempos.", url: "https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/349040/header.jpg" },
-                { title: "Color Pixel Art", icon: "🧙‍♀️", desc: "Pinte heróis e personagens de anime pixel por pixel de forma relaxante.", url: "https://gamesnacks.com/embed/games/colorpixelartclassic", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1158690/header.jpg" },
+                { title: "Super Street Fighter II", icon: "🥷", desc: "Escolha Ryu, Ken ou Chun-Li no maior torneio de artes marciais de anime.", url: "https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/349040/header.jpg" },
+                { title: "Samurai Showdown Web", icon: "⚔️", desc: "Mergulhe no Japão feudal e cruze lâminas como um samurai verdadeiro.", url: "https://archive.org/embed/msdos_Samurai_Shodown_1995", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1058450/header.jpg" },
+                { title: "Color Pixel Art Kawaii", icon: "🧙‍♀️", desc: "Pinte heróis e personagens de anime pixel por pixel de forma relaxante.", url: "https://gamesnacks.com/embed/games/colorpixelartclassic", cat: "anime", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1158690/header.jpg" },
                 
                 // === CARTAS E PUZZLES ===
-                { title: "2048 Oficial", icon: "🧩", desc: "Deslize as peças, faça a matemática mental e alcance o lendário bloco 2048.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/620/header.jpg" },
-                { title: "Chess Classic", icon: "♟️", desc: "Jogue xadrez tático contra a máquina em diferentes níveis de dificuldade.", url: "https://gamesnacks.com/embed/games/chessclassic", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/518060/header.jpg" },
-                { title: "Element Blocks", icon: "🧱", desc: "Monte os blocos na grade de forma inteligente para explodir e somar pontos.", url: "https://gamesnacks.com/embed/games/elementblocks", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
-                { title: "Onet Connect", icon: "🃏", desc: "Ligue as pedras correspondentes antes que o tempo na tela se esgote.", url: "https://gamesnacks.com/embed/games/onetconnectclassic", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/431960/header.jpg" },
+                { title: "2048 Oficial", icon: "🧩", desc: "Deslize as peças, faça a matemática mental e alcance o lendário bloco 2048.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/518060/header.jpg" },
+                { title: "Chess Classic", icon: "♟️", desc: "Jogue xadrez tático contra a máquina em diferentes níveis de dificuldade.", url: "https://gamesnacks.com/embed/games/chessclassic", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
+                { title: "Element Blocks", icon: "🧱", desc: "Monte os blocos na grade de forma inteligente para explodir e somar pontos.", url: "https://gamesnacks.com/embed/games/elementblocks", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/431960/header.jpg" },
 
                 // === FOGO E ÁGUA / CASUAL ===
                 { title: "Bubble Woods", icon: "🔥", desc: "Estoure as bolhas mágicas na floresta atirando no ângulo perfeito.", url: "https://gamesnacks.com/embed/games/bubblewoods", cat: "fogoagua", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
@@ -690,11 +778,12 @@
 
                 // === ESTRATÉGIA E IO ===
                 { title: "Pac-Man Arcade", icon: "🦠", desc: "O labirinto clássico! Fuja dos fantasmas e limpe o tabuleiro freneticamente.", url: "https://archive.org/embed/msdos_Pac-Man_1983", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/17390/header.jpg" },
+                { title: "SimCity 2000", icon: "🏙️", desc: "Seja o prefeito, construa estradas e administre a maior metrópole pixelada.", url: "https://archive.org/embed/msdos_SimCity_2000_1993", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/289070/header.jpg" },
                 { title: "Hextris Global", icon: "⛏️", desc: "Um tetris hexagonal brutalmente rápido. Sobreviva rotacionando o hexágono.", url: "https://hextris.io/", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
             ];
 
             // ==========================================
-            // MOTOR PROCEDURAL: GERANDO 500 LINKS ABERTOS A PROVA DE BLOQUEIO
+            // MOTOR PROCEDURAL: GERANDO 500 LINKS ABERTOS E FAMOSOS
             // ==========================================
             const imageLibrary = [
                 "730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520", "322170", 
@@ -702,20 +791,18 @@
                 "322330", "1097150", "1182480", "311210", "620", "504230", "10", "518060", "470220", "431960"
             ];
 
-            const prefixes = ["Super", "Ultra", "Epic", "Magic", "Valor", "Pocket", "Elite", "Grand", "Cyber", "Neon", "Retro", "Ninja", "Dark", "Light", "Crystal", "Royal"];
-            const nouns = ["Strike", "Atelier", "Quest", "Combat", "Arena", "Dash", "Royale", "Legends", "World", "City", "Sword", "Fashion", "Run", "Force"];
+            const prefixes = ["Ninja", "Saiyan", "Pirate", "Super", "Ultra", "Magic", "Valor", "Pocket", "Elite", "Grand", "Cyber", "Neon", "Retro", "Dark", "Crystal", "Royal"];
+            const nouns = ["Strike", "Atelier", "Quest", "Kombat", "Arena", "Dash", "Royale", "Legends", "World", "City", "Sword", "Fashion", "Run", "Force"];
             const suffixes = ["Online", "3D", "Pro", "Elite", "Max", "Simulator", "V", "X", "Zero", "Infinity", "Showdown"];
 
-            // Bancos de links de Provedores Abertos: 
-            // Google GameSnacks + Archive.org Retro + GitHub Pages
             const validLinks = {
-                fps: ["https://gamesnacks.com/embed/games/towercrash3d", "https://gamesnacks.com/embed/games/trafficrun", "https://gamesnacks.com/embed/games/retrodrift", "https://archive.org/embed/msdos_Doom_1993"],
-                io: ["https://archive.org/embed/msdos_Pac-Man_1983", "https://hextris.io/"],
-                puzzle: ["https://gabrielecirulli.github.io/2048/", "https://gamesnacks.com/embed/games/chessclassic", "https://gamesnacks.com/embed/games/elementblocks", "https://gamesnacks.com/embed/games/onetconnectclassic"],
-                anime: ["https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", "https://gamesnacks.com/embed/games/colorpixelartclassic"],
+                fps: ["https://gamesnacks.com/embed/games/towercrash3d", "https://gamesnacks.com/embed/games/trafficrun", "https://gamesnacks.com/embed/games/retrodrift", "https://archive.org/embed/msdos_Doom_II_-_Hell_on_Earth_1994", "https://archive.org/embed/msdos_Mortal_Kombat_1993"],
+                io: ["https://archive.org/embed/msdos_Pac-Man_1983", "https://hextris.io/", "https://archive.org/embed/msdos_SimCity_2000_1993"],
+                puzzle: ["https://gabrielecirulli.github.io/2048/", "https://gamesnacks.com/embed/games/chessclassic", "https://gamesnacks.com/embed/games/elementblocks"],
+                anime: ["https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", "https://archive.org/embed/msdos_Samurai_Shodown_1995", "https://gamesnacks.com/embed/games/colorpixelartclassic"],
                 moda: ["https://gamesnacks.com/embed/games/candyfiesta", "https://gamesnacks.com/embed/games/jewelblockpuzzle"],
                 fogoagua: ["https://gamesnacks.com/embed/games/bubblewoods", "https://gamesnacks.com/embed/games/bouncemasters"],
-                friv: ["https://gamesnacks.com/embed/games/omnomrun", "https://archive.org/embed/msdos_Prince_of_Persia_1990", "https://gamesnacks.com/embed/games/trainsurfers"]
+                friv: ["https://gamesnacks.com/embed/games/omnomrun", "https://archive.org/embed/msdos_Disney_Aladdin_1994", "https://gamesnacks.com/embed/games/trainsurfers"]
             };
 
             const catPool = ["fps", "io", "puzzle", "anime", "moda", "fogoagua", "friv"];
@@ -741,7 +828,7 @@
                 } else if(randomCat === 'io') { 
                     icon = "🌐"; desc = "Conquiste território, bata os recordes e sobreviva neste ambiente clássico."; 
                 } else if(randomCat === 'anime') { 
-                    icon = "⚔️"; desc = "Lute como os maiores heróis das animações nesta plataforma nostálgica."; 
+                    icon = "⚔️"; desc = "Lute como os maiores heróis de anime e mangá nesta plataforma nostálgica."; 
                 } else if(randomCat === 'moda') { 
                     icon = "👗"; desc = "Combine peças luxuosas, cores fortes e vitrines deslumbrantes."; 
                     coverGenerated = proxy + "images.crazygames.com/fashion-stylist/cover-1681223963784.png";
@@ -780,7 +867,7 @@
                     const delay = (index % 15) * 0.08; 
                     
                     let catLabel = 'Casual';
-                    if(game.cat === 'fps') catLabel = 'Ação & Velocidade';
+                    if(game.cat === 'fps') catLabel = 'Ação & Luta';
                     else if(game.cat === 'io') catLabel = 'Estratégia IO';
                     else if(game.cat === 'anime') catLabel = 'Anime & Retro';
                     else if(game.cat === 'fogoagua') catLabel = 'Elementos Físicos';
@@ -853,7 +940,6 @@
 
             // ==========================================
             // MOTOR DE MODAL COMPLETO (ONLOAD + SPINNER OTIMIZADO)
-            // A tag Iframe agora pede permissão universal pra tudo
             // ==========================================
             const modal = document.getElementById('gameModal');
             const closeModalBtn = document.getElementById('closeModal');
