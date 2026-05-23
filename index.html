@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STEVIN GAMES - 500 Jogos Premium</title>
+    <title>STEVIN GAMES - 700 Jogos Premium</title>
     <style>
         /* =========================================
            CSS TEMA PREMIUM - CLARO E ESCURO DINÂMICO
-           Hardware Accelerated & Glassmorphism Mantido
+           Hardware Accelerated & Glassmorphism Expandido
            ========================================= */
         :root {
             /* Variáveis do Modo Claro (Padrão) */
             --bg-color: #f0f4f8; 
             --surface-color: rgba(255, 255, 255, 0.75); 
-            --primary-accent: #4F46E5; /* Índigo */
-            --secondary-accent: #EC4899; /* Rosa */
+            --primary-accent: #4F46E5; 
+            --secondary-accent: #EC4899; 
             --text-main: #0f172a; 
             --text-muted: #475569; 
             --glass-border: rgba(255, 255, 255, 0.9);
@@ -27,8 +27,8 @@
         body.dark-mode {
             --bg-color: #0f172a; 
             --surface-color: rgba(15, 23, 42, 0.75); 
-            --primary-accent: #fbbf24; /* Ouro Nobre */
-            --secondary-accent: #f59e0b; /* Âmbar Escuro */
+            --primary-accent: #fbbf24; 
+            --secondary-accent: #f59e0b; 
             --text-main: #f8fafc; 
             --text-muted: #94a3b8; 
             --glass-border: rgba(255, 255, 255, 0.1);
@@ -124,6 +124,12 @@
                 opacity: 1;
                 transform: translateY(0) scale(1);
             }
+        }
+
+        /* Animação de Reflexo de Vidro Premium */
+        @keyframes glassShine {
+            0% { left: -150%; }
+            100% { left: 150%; }
         }
 
         header {
@@ -233,7 +239,7 @@
 
         .filter-btn.active {
             background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
-            color: #ffffff; /* Sempre branco no botão ativo para contraste */
+            color: #ffffff; 
             border-color: transparent;
             box-shadow: 0 12px 25px rgba(251, 191, 36, 0.35);
             transform: translateY(-3px) scale(1.05);
@@ -246,6 +252,9 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 3rem;
+            /* Otimização de renderização pesada */
+            content-visibility: auto;
+            contain-intrinsic-size: 1000px;
         }
 
         .game-card {
@@ -266,6 +275,25 @@
             flex-direction: column;
             box-shadow: 0 15px 35px var(--shadow-color);
             will-change: transform, box-shadow;
+        }
+
+        /* Efeito de Reflexo de Vidro Premium */
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            z-index: 15;
+            transition: none;
+            pointer-events: none;
+        }
+
+        .game-card:hover::before {
+            animation: glassShine 0.8s ease forwards;
         }
 
         .game-cover {
@@ -386,13 +414,13 @@
 
         .btn-play:hover {
             background-color: var(--primary-accent);
-            color: #0f172a; /* Texto escuro no botão para brilhar no ouro */
+            color: #0f172a; 
             box-shadow: 0 15px 30px rgba(251, 191, 36, 0.4);
             transform: translateY(-2px);
         }
 
         body:not(.dark-mode) .btn-play:hover {
-            color: #ffffff; /* Texto branco no modo claro */
+            color: #ffffff; 
         }
 
         /* Modal Focado em Imersão e Desempenho */
@@ -568,16 +596,19 @@
         <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título épico, categoria ou estilo...">
     </div>
 
-    <!-- Filtros Inteligentes -->
+    <!-- Filtros Inteligentes Expandidos -->
     <div class="filters" id="filterContainer">
-        <button class="filter-btn active" data-filter="all">Todos os 500 Jogos</button>
-        <button class="filter-btn" data-filter="friv">Clássicos (Friv)</button>
-        <button class="filter-btn" data-filter="fps">Ação, Corrida & FPS</button>
-        <button class="filter-btn" data-filter="io">Estratégia & .IO</button>
-        <button class="filter-btn" data-filter="puzzle">Esportes & Cartas</button>
-        <button class="filter-btn" data-filter="anime">Anime & Magia</button>
-        <button class="filter-btn" data-filter="fogoagua">Fogo e Água</button>
+        <button class="filter-btn active" data-filter="all">Todos os 700 Jogos</button>
+        <button class="filter-btn" data-filter="aventura">Aventura</button>
+        <button class="filter-btn" data-filter="fps">Ação & FPS</button>
+        <button class="filter-btn" data-filter="anime">Anime & Luta</button>
+        <button class="filter-btn" data-filter="rpg">RPG</button>
+        <button class="filter-btn" data-filter="arcade">Arcade Clássico</button>
         <button class="filter-btn" data-filter="moda">Roupas & Moda</button>
+        <button class="filter-btn" data-filter="fogoagua">Fogo & Água</button>
+        <button class="filter-btn" data-filter="puzzle">Quebra-Cabeça</button>
+        <button class="filter-btn" data-filter="io">Estratégia & .IO</button>
+        <button class="filter-btn" data-filter="friv">Friv Casual</button>
     </div>
 
     <div class="container" id="gamesContainer">
@@ -614,18 +645,17 @@
                 themeIcon.textContent = isDark ? '☀️' : '🌙';
                 themeText.textContent = isDark ? 'Modo Claro' : 'Modo Escuro';
                 
-                // Mágica nas partículas: Elas viram Ouro no modo escuro!
                 particlesArray.forEach(p => {
                     if (isDark) {
-                        p.color = Math.random() > 0.5 ? '#fbbf24' : '#f59e0b'; // Tons de Ouro/Âmbar
+                        p.color = Math.random() > 0.5 ? '#fbbf24' : '#f59e0b'; 
                     } else {
-                        p.color = Math.random() > 0.5 ? '#4F46E5' : '#EC4899'; // Tons Índigo/Rosa
+                        p.color = Math.random() > 0.5 ? '#4F46E5' : '#EC4899'; 
                     }
                 });
             });
 
             // ==========================================
-            // SISTEMA DE PARTÍCULAS INTERATIVAS (Otimizado)
+            // SISTEMA DE PARTÍCULAS INTERATIVAS
             // ==========================================
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
@@ -716,7 +746,6 @@
 
             function connectParticles() {
                 let opacityValue = 1;
-                // Pega a cor baseada no tema para as linhas conectoras
                 const isDark = document.body.classList.contains('dark-mode');
                 const rgbColor = isDark ? '251, 191, 36' : '79, 70, 229';
 
@@ -740,22 +769,28 @@
             animateParticles();
 
             // ==========================================
-            // NOVO BANCO DE DADOS: FAMOSOS, ANIME E LIVRES (A PROVA DE BLOQUEIO)
+            // NOVO BANCO DE DADOS: 700 JOGOS E NOVAS CATEGORIAS
+            // Base livre de bloqueio expandida: RPG, Aventura, Arcade
             // ==========================================
             const proxy = "https://wsrv.nl/?url=";
             
             const gamesDatabase = [
-                // === FAMOSOS & FRIV (Retro Layer & GameSnacks) ===
-                { title: "Om Nom Run", icon: "🏃", desc: "Corra, desvie de obstáculos e colete moedas com o famoso Om Nom.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" },
-                { title: "Prince of Persia (Classic)", icon: "🗡️", desc: "A lenda de 1990! Salve a princesa enfrentando os guardas do castelo.", url: "https://archive.org/embed/msdos_Prince_of_Persia_1990", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/383150/header.jpg" },
-                { title: "Aladdin (1994)", icon: "🧞‍♂️", desc: "Aventure-se por Agrabah com sua espada e maçãs neste clássico de ouro.", url: "https://archive.org/embed/msdos_Disney_Aladdin_1994", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
-                { title: "Tomb Raider (1996)", icon: "🧗‍♀️", desc: "Explore catacumbas secretas com Lara Croft no jogo original em 3D.", url: "https://archive.org/embed/msdos_Tomb_Raider_1996", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg" },
-                { title: "Train Surfers", icon: "🛹", desc: "Estilo Friv autêntico! Deslize sobre trens e fuja do inspetor rabugento.", url: "https://gamesnacks.com/embed/games/trainsurfers", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/620/header.jpg" },
+                // === AVENTURA ===
+                { title: "Zelda Classic", icon: "🗡️", desc: "A lenda original. Explore masmorras e salve o reino de Hyrule.", url: "https://archive.org/embed/msdos_Zelda_Classic_2.10.0_2004", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1172470/header.jpg" },
+                { title: "Prince of Persia", icon: "🕌", desc: "A lenda de 1990! Salve a princesa enfrentando os guardas do castelo.", url: "https://archive.org/embed/msdos_Prince_of_Persia_1990", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/383150/header.jpg" },
+                { title: "Aladdin (1994)", icon: "🧞‍♂️", desc: "Aventure-se por Agrabah com sua espada e maçãs neste clássico de ouro.", url: "https://archive.org/embed/msdos_Disney_Aladdin_1994", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
+                
+                // === RPG ===
+                { title: "Ultima VI: Prophet", icon: "📜", desc: "Um dos maiores clássicos do RPG. Explore reinos, crie feitiços e converse com NPCs.", url: "https://archive.org/embed/msdos_Ultima_VI_-_The_False_Prophet_1990", cat: "rpg", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg" },
+                { title: "Rogue Dungeons", icon: "🧝‍♂️", desc: "O RPG que criou o gênero Roguelike. Desça nas masmorras infinitas.", url: "https://archive.org/embed/msdos_Rogue_1983", cat: "rpg", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" },
+
+                // === ARCADE ===
+                { title: "Donkey Kong (1981)", icon: "🦍", desc: "Escale as vigas, pule os barris e salve Pauline na primeira aparição de Mario.", url: "https://archive.org/embed/msdos_Donkey_Kong_1981", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/4000/header.jpg" },
+                { title: "Tetris Original", icon: "🧱", desc: "O quebra-cabeça soviético que dominou o mundo. Encaixe os blocos perfeitamente.", url: "https://archive.org/embed/msdos_Tetris_1986", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" },
 
                 // === AÇÃO E FPS ===
                 { title: "DOOM II: Hell on Earth", icon: "🔫", desc: "O lendário FPS original. Pegue sua espingarda e limpe a base de Marte.", url: "https://archive.org/embed/msdos_Doom_II_-_Hell_on_Earth_1994", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/2280/header.jpg" },
                 { title: "Mortal Kombat (1993)", icon: "🐉", desc: "Scorpion, Sub-Zero e fatalities brutais no clássico absoluto da luta.", url: "https://archive.org/embed/msdos_Mortal_Kombat_1993", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg" },
-                { title: "Tower Crash 3D", icon: "💣", desc: "Atire esferas destrutivas e derrube as maiores torres de blocos com física 3D.", url: "https://gamesnacks.com/embed/games/towercrash3d", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/310560/header.jpg" },
                 { title: "Traffic Run", icon: "🏎️", desc: "Pise no acelerador e desvie no trânsito frenético de uma cidade perigosa.", url: "https://gamesnacks.com/embed/games/trafficrun", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/212480/header.jpg" },
                 
                 // === ANIME E MAGIA ===
@@ -766,24 +801,23 @@
                 // === CARTAS E PUZZLES ===
                 { title: "2048 Oficial", icon: "🧩", desc: "Deslize as peças, faça a matemática mental e alcance o lendário bloco 2048.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/518060/header.jpg" },
                 { title: "Chess Classic", icon: "♟️", desc: "Jogue xadrez tático contra a máquina em diferentes níveis de dificuldade.", url: "https://gamesnacks.com/embed/games/chessclassic", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
-                { title: "Element Blocks", icon: "🧱", desc: "Monte os blocos na grade de forma inteligente para explodir e somar pontos.", url: "https://gamesnacks.com/embed/games/elementblocks", cat: "puzzle", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/431960/header.jpg" },
 
                 // === FOGO E ÁGUA / CASUAL ===
                 { title: "Bubble Woods", icon: "🔥", desc: "Estoure as bolhas mágicas na floresta atirando no ângulo perfeito.", url: "https://gamesnacks.com/embed/games/bubblewoods", cat: "fogoagua", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
-                { title: "Bounce Masters", icon: "💧", desc: "Calcule a força e a física para arremessar o pinguim pelo gelo.", url: "https://gamesnacks.com/embed/games/bouncemasters", cat: "fogoagua", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-3-ice-temple/cover-1586285189392.png" },
-
+                
                 // === MODA E ROUPAS ===
                 { title: "Candy Fiesta", icon: "👗", desc: "Combine cores brilhantes e enfeites numa explosão visual no estilo Fashion.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "moda", cover: proxy + "images.crazygames.com/fashion-stylist/cover-1681223963784.png" },
-                { title: "Jewel Block", icon: "👠", desc: "Encaixe jóias reluzentes e diamantes brutos em uma vitrine luxuosa.", url: "https://gamesnacks.com/embed/games/jewelblockpuzzle", cat: "moda", cover: proxy + "images.crazygames.com/games/fashion-show/cover-1667468160410.png" },
-
+                
                 // === ESTRATÉGIA E IO ===
                 { title: "Pac-Man Arcade", icon: "🦠", desc: "O labirinto clássico! Fuja dos fantasmas e limpe o tabuleiro freneticamente.", url: "https://archive.org/embed/msdos_Pac-Man_1983", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/17390/header.jpg" },
                 { title: "SimCity 2000", icon: "🏙️", desc: "Seja o prefeito, construa estradas e administre a maior metrópole pixelada.", url: "https://archive.org/embed/msdos_SimCity_2000_1993", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/289070/header.jpg" },
-                { title: "Hextris Global", icon: "⛏️", desc: "Um tetris hexagonal brutalmente rápido. Sobreviva rotacionando o hexágono.", url: "https://hextris.io/", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
+                
+                // === FRIV ===
+                { title: "Om Nom Run", icon: "🏃", desc: "Corra, desvie de obstáculos e colete moedas com o famoso Om Nom.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "friv", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" }
             ];
 
             // ==========================================
-            // MOTOR PROCEDURAL: GERANDO 500 LINKS ABERTOS E FAMOSOS
+            // MOTOR PROCEDURAL: GERANDO 700 LINKS ABERTOS E FAMOSOS
             // ==========================================
             const imageLibrary = [
                 "730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520", "322170", 
@@ -796,7 +830,10 @@
             const suffixes = ["Online", "3D", "Pro", "Elite", "Max", "Simulator", "V", "X", "Zero", "Infinity", "Showdown"];
 
             const validLinks = {
-                fps: ["https://gamesnacks.com/embed/games/towercrash3d", "https://gamesnacks.com/embed/games/trafficrun", "https://gamesnacks.com/embed/games/retrodrift", "https://archive.org/embed/msdos_Doom_II_-_Hell_on_Earth_1994", "https://archive.org/embed/msdos_Mortal_Kombat_1993"],
+                aventura: ["https://archive.org/embed/msdos_Zelda_Classic_2.10.0_2004", "https://archive.org/embed/msdos_Prince_of_Persia_1990", "https://gamesnacks.com/embed/games/omnomrun"],
+                rpg: ["https://archive.org/embed/msdos_Ultima_VI_-_The_False_Prophet_1990", "https://archive.org/embed/msdos_Rogue_1983"],
+                arcade: ["https://archive.org/embed/msdos_Donkey_Kong_1981", "https://archive.org/embed/msdos_Tetris_1986"],
+                fps: ["https://gamesnacks.com/embed/games/towercrash3d", "https://gamesnacks.com/embed/games/trafficrun", "https://archive.org/embed/msdos_Doom_II_-_Hell_on_Earth_1994", "https://archive.org/embed/msdos_Mortal_Kombat_1993"],
                 io: ["https://archive.org/embed/msdos_Pac-Man_1983", "https://hextris.io/", "https://archive.org/embed/msdos_SimCity_2000_1993"],
                 puzzle: ["https://gabrielecirulli.github.io/2048/", "https://gamesnacks.com/embed/games/chessclassic", "https://gamesnacks.com/embed/games/elementblocks"],
                 anime: ["https://archive.org/embed/msdos_Super_Street_Fighter_II_1995", "https://archive.org/embed/msdos_Samurai_Shodown_1995", "https://gamesnacks.com/embed/games/colorpixelartclassic"],
@@ -805,10 +842,11 @@
                 friv: ["https://gamesnacks.com/embed/games/omnomrun", "https://archive.org/embed/msdos_Disney_Aladdin_1994", "https://gamesnacks.com/embed/games/trainsurfers"]
             };
 
-            const catPool = ["fps", "io", "puzzle", "anime", "moda", "fogoagua", "friv"];
+            const catPool = ["aventura", "rpg", "arcade", "fps", "io", "puzzle", "anime", "moda", "fogoagua", "friv"];
 
             let count = gamesDatabase.length;
-            while (count < 500) {
+            // ESCALA TOTAL PARA 700 JOGOS
+            while (count < 700) {
                 const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
                 const nou = nouns[Math.floor(Math.random() * nouns.length)];
                 const suf = suffixes[Math.floor(Math.random() * suffixes.length)];
@@ -839,7 +877,12 @@
                     icon = "🧩"; desc = "Treine seu cérebro, junte os blocos certos e solucione os enigmas da web."; 
                 } else if(randomCat === 'friv') { 
                     icon = "🕹️"; desc = "O mais puro suco da nostalgia. Jogo clássico estilo Flash direto do navegador."; 
-                    coverGenerated = proxy + "cdn.akamai.steamstatic.com/steam/apps/383150/header.jpg"; 
+                } else if(randomCat === 'aventura') {
+                    icon = "🗺️"; desc = "Descubra tesouros perdidos e embarque em uma jornada épica pelo mapa.";
+                } else if(randomCat === 'rpg') {
+                    icon = "📜"; desc = "Evolua suas habilidades, crie feitiços poderosos e converse com viajantes.";
+                } else if(randomCat === 'arcade') {
+                    icon = "🕹️"; desc = "Fichas infinitas. Tente bater a pontuação mais alta neste clássico de fliperama.";
                 }
 
                 gamesDatabase.push({
@@ -857,23 +900,27 @@
             const gamesCounter = document.getElementById('gamesCounter');
 
             // ==========================================
-            // OTIMIZAÇÃO DE RENDERIZAÇÃO: DOM Fragment Pattern (Preservado e Veloz)
+            // OTIMIZAÇÃO DE RENDERIZAÇÃO PARA 700 ITENS (Limite de Animação)
             // ==========================================
             function renderGames(games) {
-                gamesCounter.textContent = `${games.length} Jogos Prontos (Servidores Seguros Anti-Bloqueio Vercel Ativos)`;
+                gamesCounter.textContent = `${games.length} Jogos Prontos (Catálogo Expandido e Seguro)`;
                 let htmlString = '';
 
                 games.forEach((game, index) => {
-                    const delay = (index % 15) * 0.08; 
+                    // Limita o atraso máximo de animação para não sobrecarregar o render de 700 itens
+                    const delay = Math.min(index, 30) * 0.05; 
                     
                     let catLabel = 'Casual';
                     if(game.cat === 'fps') catLabel = 'Ação & Luta';
                     else if(game.cat === 'io') catLabel = 'Estratégia IO';
                     else if(game.cat === 'anime') catLabel = 'Anime & Retro';
-                    else if(game.cat === 'fogoagua') catLabel = 'Elementos Físicos';
-                    else if(game.cat === 'moda') catLabel = 'Visuais & Moda';
-                    else if(game.cat === 'puzzle') catLabel = 'Mental & Puzzle';
-                    else if(game.cat === 'friv') catLabel = 'Clássico Friv';
+                    else if(game.cat === 'fogoagua') catLabel = 'Elementos';
+                    else if(game.cat === 'moda') catLabel = 'Moda';
+                    else if(game.cat === 'puzzle') catLabel = 'Puzzle';
+                    else if(game.cat === 'friv') catLabel = 'Friv';
+                    else if(game.cat === 'aventura') catLabel = 'Aventura';
+                    else if(game.cat === 'rpg') catLabel = 'RPG Classic';
+                    else if(game.cat === 'arcade') catLabel = 'Arcade';
 
                     htmlString += `
                         <div class="game-card" data-title="${game.title}" data-url="${game.url}" data-cat="${game.cat}" style="animation-delay: ${delay}s">
@@ -899,7 +946,7 @@
             renderGames(gamesDatabase);
 
             // ==========================================
-            // OTIMIZAÇÃO DE BUSCA: Debounce Engine (Intacto)
+            // OTIMIZAÇÃO DE BUSCA: Debounce Engine
             // ==========================================
             const searchInput = document.getElementById('searchInput');
             let searchTimeout;
