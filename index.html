@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STEVIN GAMES - 1000 Jogos Premium</title>
+    <title>STEVIN GAMES - 1000 Jogos Premium & App</title>
     <style>
         /* =========================================
            CSS TEMA PREMIUM - CLARO E ESCURO DINÂMICO
-           Hardware Accelerated, Glassmorphism & Scroll Reveal
+           Hardware Accelerated, Glassmorphism, Scroll Reveal & IndexedDB
            ========================================= */
         :root {
             --bg-color: #f0f4f8; 
@@ -25,8 +25,8 @@
         body.dark-mode {
             --bg-color: #0f172a; 
             --surface-color: rgba(15, 23, 42, 0.75); 
-            --primary-accent: #fbbf24; 
-            --secondary-accent: #f59e0b; 
+            --primary-accent: #fbbf24; /* Ouro */
+            --secondary-accent: #f59e0b; /* Âmbar */
             --text-main: #f8fafc; 
             --text-muted: #94a3b8; 
             --glass-border: rgba(255, 255, 255, 0.1);
@@ -117,9 +117,27 @@
 
         header {
             text-align: center;
-            padding: 7rem 2rem 3rem 2rem;
+            padding: 5rem 2rem 3rem 2rem;
             animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             will-change: transform, opacity;
+        }
+
+        #clock-display {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--primary-accent);
+            margin-bottom: 5px;
+            text-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        #greeting-msg {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         h1 {
@@ -223,6 +241,11 @@
             box-shadow: 0 12px 25px rgba(251, 191, 36, 0.35);
             transform: translateY(-3px) scale(1.05);
         }
+        
+        .filter-btn.btn-fav {
+            border-color: #fbbf24;
+            color: #fbbf24;
+        }
 
         .container {
             max-width: 1600px; 
@@ -231,7 +254,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 3rem;
-            /* OTIMIZAÇÃO CRÍTICA PARA 1000 JOGOS */
             content-visibility: auto;
             contain-intrinsic-size: 1000px;
         }
@@ -252,13 +274,11 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 15px 35px var(--shadow-color);
-            /* Estado inicial da animação de scroll */
             opacity: 0;
             transform: translateY(40px) scale(0.95);
             will-change: transform, opacity, box-shadow;
         }
 
-        /* Classe ativada pelo IntersectionObserver ao rolar a tela */
         .game-card.show {
             opacity: 1;
             transform: translateY(0) scale(1);
@@ -294,6 +314,39 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease;
+        }
+        
+        /* Botão de Estrela (Favoritos) */
+        .fav-star {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            z-index: 20;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .fav-star:hover {
+            transform: scale(1.2) rotate(15deg);
+            background: rgba(0,0,0,0.8);
+            border-color: #fbbf24;
+        }
+
+        .fav-star.active {
+            color: #fbbf24;
+            border-color: #fbbf24;
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
         }
 
         .game-content {
@@ -555,11 +608,13 @@
     <canvas id="particles-canvas"></canvas>
 
     <header>
+        <div id="clock-display">00:00</div>
+        <div id="greeting-msg">Carregando perfil...</div>
         <h1>STEVIN GAMES</h1>
-        <p>A Maior e Mais Bela Plataforma Imersiva da Web</p>
+        <p>Plataforma Imersiva Premium com Banco de Dados Embutido</p>
     </header>
 
-    <div class="games-counter" id="gamesCounter">Iniciando Motor de 1000 Jogos...</div>
+    <div class="games-counter" id="gamesCounter">Iniciando Motor e Conectando IndexedDB...</div>
 
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título, categoria ou estilo...">
@@ -567,6 +622,7 @@
 
     <div class="filters" id="filterContainer">
         <button class="filter-btn active" data-filter="all">Todos os 1000 Jogos</button>
+        <button class="filter-btn btn-fav" data-filter="fav">⭐ Meus Favoritos</button>
         <button class="filter-btn" data-filter="fps">Ação & FPS</button>
         <button class="filter-btn" data-filter="clickjogos">Click Jogos</button>
         <button class="filter-btn" data-filter="anime">Anime & Ninja</button>
@@ -593,7 +649,25 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // ==========================================
-            // SISTEMA DE THEME TOGGLE (CLARO E ESCURO)
+            // RELÓGIO E SAUDAÇÃO PERSONALIZADA
+            // ==========================================
+            function updateClock() {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('clock-display').textContent = `${hours}:${minutes}`;
+
+                let greeting = "Boa noite";
+                if (now.getHours() >= 5 && now.getHours() < 12) greeting = "Bom dia";
+                else if (now.getHours() >= 12 && now.getHours() < 18) greeting = "Boa tarde";
+                
+                document.getElementById('greeting-msg').textContent = `${greeting}, Estevão.`;
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // ==========================================
+            // SISTEMA DE THEME TOGGLE
             // ==========================================
             const themeToggle = document.getElementById('themeToggle');
             const themeIcon = document.getElementById('themeIcon');
@@ -616,7 +690,7 @@
             });
 
             // ==========================================
-            // SISTEMA DE PARTÍCULAS INTERATIVAS
+            // SISTEMA DE PARTÍCULAS
             // ==========================================
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
@@ -627,39 +701,26 @@
             canvas.height = window.innerHeight;
 
             const mouse = { x: null, y: null, radius: 180 }
-
             window.addEventListener('mousemove', function(event) {
-                mouse.x = event.x;
-                mouse.y = event.y;
+                mouse.x = event.x; mouse.y = event.y;
             });
-
             window.addEventListener('resize', function() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+                canvas.width = window.innerWidth; canvas.height = window.innerHeight;
                 initParticles();
             });
 
             class Particle {
                 constructor(x, y, directionX, directionY, size, color) {
-                    this.x = x;
-                    this.y = y;
-                    this.directionX = directionX;
-                    this.directionY = directionY;
-                    this.size = size;
-                    this.color = color;
+                    this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
                 }
                 draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle = this.color; ctx.fill();
                 }
                 update() {
                     if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
                     if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
 
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
+                    let dx = mouse.x - this.x; let dy = mouse.y - this.y;
                     let distance = Math.sqrt(dx*dx + dy*dy);
                     
                     if (distance < mouse.radius) {
@@ -668,8 +729,7 @@
                         if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 2;
                         if (mouse.y > this.y && this.y > this.size * 10) this.y -= 2;
                     }
-                    this.x += this.directionX;
-                    this.y += this.directionY;
+                    this.x += this.directionX; this.y += this.directionY;
                     this.draw();
                 }
             }
@@ -683,13 +743,8 @@
                     let size = (Math.random() * 3) + 1;
                     let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
                     let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                    let directionX = (Math.random() * 0.8) - 0.4;
-                    let directionY = (Math.random() * 0.8) - 0.4;
-                    
-                    let color = isDark 
-                        ? (Math.random() > 0.5 ? '#fbbf24' : '#f59e0b') 
-                        : (Math.random() > 0.5 ? '#4F46E5' : '#EC4899'); 
-
+                    let directionX = (Math.random() * 0.8) - 0.4; let directionY = (Math.random() * 0.8) - 0.4;
+                    let color = isDark ? (Math.random() > 0.5 ? '#fbbf24' : '#f59e0b') : (Math.random() > 0.5 ? '#4F46E5' : '#EC4899'); 
                     particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
                 }
             }
@@ -698,9 +753,7 @@
                 requestAnimationFrame(animateParticles);
                 if (!isModalOpen) {
                     ctx.clearRect(0, 0, innerWidth, innerHeight);
-                    for (let i = 0; i < particlesArray.length; i++) {
-                        particlesArray[i].update();
-                    }
+                    for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); }
                     connectParticles();
                 }
             }
@@ -730,119 +783,177 @@
             animateParticles();
 
             // ==========================================
-            // MOTOR PROCEDURAL 1000 JOGOS + ANTI-FALHA DE IMAGENS
+            // INDEXED DB - SISTEMA DE FAVORITOS NATIVO
             // ==========================================
-            const proxy = "https://wsrv.nl/?url=";
-            
-            // Destaques fixos para garantir que os primeiros da página sejam absolutos
-            const gamesDatabase = [
-                { title: "Venge.io", icon: "🔫", desc: "Um dos melhores jogos de tiro multijogador focados em objetivos.", url: "https://venge.io/", cat: "fps", cover: proxy + "i.ytimg.com/vi/W4k0r-k9yT0/maxresdefault.jpg" },
-                { title: "Ev.io", icon: "🎯", desc: "Atirador FPS futurista no estilo Halo, rápido e direto no navegador.", url: "https://ev.io/", cat: "fps", cover: proxy + "ev.io/sites/default/files/2021-02/evio_promo.jpg" },
-                { title: "Fogo e Água Clássico", icon: "🔥💧", desc: "O rei do Click Jogos! Coordene os elementos pelos labirintos abertos.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
-                { title: "Subway Surfers Web", icon: "🛹", desc: "Corra pelos trilhos e colete moedas de ouro sem parar. Sem instalação.", url: "https://eggycar.github.io/subwaysurfers/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
-                { title: "Shell Shockers", icon: "🥚", desc: "Jogo de tiro em primeira pessoa multijogador hilário onde você é um ovo.", url: "https://shellshock.io/", cat: "fps", cover: proxy + "shellshock.io/img/EggIcon.png" },
-                { title: "2048 Oficial", icon: "🧩", desc: "O clássico e viciante puzzle matemático de juntar blocos.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "upload.wikimedia.org/wikipedia/commons/1/18/2048_logo.svg" },
-                { title: "Hextris Global", icon: "🕹️", desc: "Mova a base hexagonal e evite que os blocos atinjam as bordas.", url: "https://hextris.io/", cat: "io", cover: proxy + "hextris.io/images/facebook-promo.png" },
-                { title: "Flappy Bird", icon: "🐦", desc: "O jogo mais frustrante e viciante da internet. Voe pelos canos.", url: "https://flappybird.io/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
-                { title: "Minecraft Web", icon: "⛏️", desc: "A versão clássica do Minecraft. Construa e destrua blocos.", url: "https://classic.minecraft.net/", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
-            ];
+            let db;
+            let myFavorites = new Set();
+            const dbRequest = indexedDB.open("StevinGames_DB", 1);
 
-            // Banco de IDs super seguros para capas (usando Steam CDN)
-            const imageLibrary = [
-                "730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520", "322170", 
-                "1086940", "230410", "4000", "236390", "1091500", "292030", "1245620", "383150", "220", "17390", 
-                "322330", "1097150", "1182480", "311210", "620", "504230", "10", "518060", "470220", "431960"
-            ];
-
-            const prefixes = ["Elite", "Combat", "Super", "Ultra", "Ghost", "Sniper", "Valor", "Pocket", "Grand", "Cyber", "Neon", "Retro", "Dark", "Crystal", "Royal"];
-            const nouns = ["Strike", "Force", "Ops", "Kombat", "Arena", "Dash", "Royale", "Legends", "World", "City", "Sword", "Fashion", "Run", "Shooter"];
-            const suffixes = ["Online", "3D", "Pro", "Elite", "Max", "Simulator", "V", "X", "Zero", "Infinity", "Showdown"];
-
-            // Apenas URLs abertas que NÃO bloqueiam Iframe
-            const validLinks = {
-                fps: ["https://ev.io/", "https://venge.io/", "https://smashkarts.io/", "https://shellshock.io/", "https://krunker.io/"],
-                io: ["https://hextris.io/", "https://agar.io/", "https://slither.io/", "https://hole-io.com/"],
-                puzzle: ["https://gabrielecirulli.github.io/2048/", "https://skribbl.io/"],
-                anime: ["https://ev.io/", "https://venge.io/"], // Preenchendo com jogos funcionais rápidos
-                clickjogos: ["https://flappybird.io/", "https://eggycar.github.io/subwaysurfers/", "https://mkings.github.io/fireboy-watergirl/"],
-                aventura: ["https://classic.minecraft.net/"],
-                arcade: ["https://hextris.io/", "https://flappybird.io/"]
+            dbRequest.onupgradeneeded = function(e) {
+                db = e.target.result;
+                if (!db.objectStoreNames.contains("favorites")) {
+                    db.createObjectStore("favorites", { keyPath: "title" });
+                }
             };
 
-            const catPool = ["fps", "fps", "aventura", "arcade", "io", "puzzle", "anime", "clickjogos"];
+            dbRequest.onsuccess = function(e) {
+                db = e.target.result;
+                loadFavoritesFromDB();
+            };
 
-            let count = gamesDatabase.length;
-            
-            // LOOP POTENTE: Gera a lista até 1000 garantindo funcionamento
-            while (count < 1000) {
-                const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
-                const nou = nouns[Math.floor(Math.random() * nouns.length)];
-                const suf = suffixes[Math.floor(Math.random() * suffixes.length)];
-                const generatedName = `${pre} ${nou} ${suf}`;
-                
-                const randomCat = catPool[Math.floor(Math.random() * catPool.length)];
-                const categoryLinks = validLinks[randomCat];
-                const randomUrl = categoryLinks[Math.floor(Math.random() * categoryLinks.length)];
-                const randomImageId = imageLibrary[count % imageLibrary.length];
+            function loadFavoritesFromDB() {
+                const transaction = db.transaction(["favorites"], "readonly");
+                const store = transaction.objectStore("favorites");
+                const request = store.getAll();
 
-                let icon = "🎮";
-                let desc = "Motor aberto, sem bloqueios. Jogue diretamente do seu navegador com alta performance.";
-                let coverGenerated = proxy + `cdn.akamai.steamstatic.com/steam/apps/${randomImageId}/header.jpg`;
+                request.onsuccess = function() {
+                    const data = request.result;
+                    data.forEach(item => myFavorites.add(item.title));
+                    // Após carregar os favoritos da memória, gera e renderiza os 1000 jogos
+                    generateGamesAndRender();
+                };
+            }
 
-                if(randomCat === 'fps') { 
-                    icon = "🔫"; desc = "Gatilho rápido! Servidores multijogador em tempo real, sem instalação."; 
-                } else if(randomCat === 'io') { 
-                    icon = "🌐"; desc = "Conquiste território, bata recordes mundiais e domine a arena aberta."; 
-                } else if(randomCat === 'anime') { 
-                    icon = "⚔️"; desc = "Lute como os maiores ninjas e heróis das sagas japonesas."; 
-                } else if(randomCat === 'puzzle') { 
-                    icon = "🧩"; desc = "Lógica e matemática no navegador. Mova as peças e vença o desafio."; 
-                } else if(randomCat === 'clickjogos') { 
-                    icon = "🕹️"; desc = "A lenda do Click Jogos. Casual, de carregamento rápido e extremamente viciante."; 
-                } else if(randomCat === 'aventura') {
-                    icon = "🗺️"; desc = "Mundos de blocos e mistérios abertos esperando para serem explorados por você.";
-                } else if(randomCat === 'arcade') {
-                    icon = "🕹️"; desc = "Fliperama raiz. Tente alcançar a pontuação máxima nas máquinas da web.";
+            // A função global chamada ao clicar na estrela
+            window.toggleFav = function(event, title) {
+                event.stopPropagation(); // Impede que o clique na estrela abra o jogo
+                const starEl = event.currentTarget;
+                const transaction = db.transaction(["favorites"], "readwrite");
+                const store = transaction.objectStore("favorites");
+
+                if (myFavorites.has(title)) {
+                    myFavorites.delete(title);
+                    store.delete(title);
+                    starEl.classList.remove('active');
+                    starEl.innerHTML = '☆';
+                } else {
+                    myFavorites.add(title);
+                    store.put({ title: title, savedAt: new Date().toISOString() });
+                    starEl.classList.add('active');
+                    starEl.innerHTML = '⭐';
                 }
 
-                gamesDatabase.push({
-                    title: generatedName,
-                    icon: icon,
-                    desc: desc,
-                    url: randomUrl,
-                    cat: randomCat,
-                    cover: coverGenerated
-                });
-                count++;
+                // Se o filtro de favoritos estiver ativo, re-renderiza a lista para sumir com o desmarcado
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                if(activeFilter === 'fav') {
+                    document.querySelector('[data-filter="fav"]').click();
+                }
+            };
+
+            // ==========================================
+            // MOTOR PROCEDURAL 1000 JOGOS + FALLBACK
+            // ==========================================
+            const gamesDatabase = [];
+            
+            function generateGamesAndRender() {
+                const proxy = "https://wsrv.nl/?url=";
+                
+                const initialGames = [
+                    { title: "Venge.io", icon: "🔫", desc: "Um dos melhores jogos de tiro multijogador focados em objetivos.", url: "https://venge.io/", cat: "fps", cover: proxy + "i.ytimg.com/vi/W4k0r-k9yT0/maxresdefault.jpg" },
+                    { title: "Ev.io", icon: "🎯", desc: "Atirador FPS futurista no estilo Halo, rápido e direto no navegador.", url: "https://ev.io/", cat: "fps", cover: proxy + "ev.io/sites/default/files/2021-02/evio_promo.jpg" },
+                    { title: "Fogo e Água Clássico", icon: "🔥💧", desc: "O rei do Click Jogos! Coordene os elementos pelos labirintos abertos.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
+                    { title: "Subway Surfers Web", icon: "🛹", desc: "Corra pelos trilhos e colete moedas de ouro sem parar. Sem instalação.", url: "https://eggycar.github.io/subwaysurfers/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
+                    { title: "Shell Shockers", icon: "🥚", desc: "Jogo de tiro em primeira pessoa multijogador hilário onde você é um ovo.", url: "https://shellshock.io/", cat: "fps", cover: proxy + "shellshock.io/img/EggIcon.png" },
+                    { title: "2048 Oficial", icon: "🧩", desc: "O clássico e viciante puzzle matemático de juntar blocos.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "upload.wikimedia.org/wikipedia/commons/1/18/2048_logo.svg" },
+                    { title: "Hextris Global", icon: "🕹️", desc: "Mova a base hexagonal e evite que os blocos atinjam as bordas.", url: "https://hextris.io/", cat: "io", cover: proxy + "hextris.io/images/facebook-promo.png" },
+                    { title: "Flappy Bird", icon: "🐦", desc: "O jogo mais frustrante e viciante da internet. Voe pelos canos.", url: "https://flappybird.io/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
+                    { title: "Minecraft Web", icon: "⛏️", desc: "A versão clássica do Minecraft. Construa e destrua blocos.", url: "https://classic.minecraft.net/", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
+                ];
+                
+                gamesDatabase.push(...initialGames);
+
+                const imageLibrary = [
+                    "730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520", "322170", 
+                    "1086940", "230410", "4000", "236390", "1091500", "292030", "1245620", "383150", "220", "17390", 
+                    "322330", "1097150", "1182480", "311210", "620", "504230", "10", "518060", "470220", "431960"
+                ];
+
+                const prefixes = ["Elite", "Combat", "Super", "Ultra", "Ghost", "Sniper", "Valor", "Pocket", "Grand", "Cyber", "Neon", "Retro", "Dark", "Crystal", "Royal"];
+                const nouns = ["Strike", "Force", "Ops", "Kombat", "Arena", "Dash", "Royale", "Legends", "World", "City", "Sword", "Fashion", "Run", "Shooter"];
+                const suffixes = ["Online", "3D", "Pro", "Elite", "Max", "Simulator", "V", "X", "Zero", "Infinity", "Showdown"];
+
+                const validLinks = {
+                    fps: ["https://ev.io/", "https://venge.io/", "https://smashkarts.io/", "https://shellshock.io/", "https://krunker.io/"],
+                    io: ["https://hextris.io/", "https://agar.io/", "https://slither.io/", "https://hole-io.com/"],
+                    puzzle: ["https://gabrielecirulli.github.io/2048/", "https://skribbl.io/"],
+                    anime: ["https://ev.io/", "https://venge.io/"],
+                    clickjogos: ["https://flappybird.io/", "https://eggycar.github.io/subwaysurfers/", "https://mkings.github.io/fireboy-watergirl/"],
+                    aventura: ["https://classic.minecraft.net/"],
+                    arcade: ["https://hextris.io/", "https://flappybird.io/"]
+                };
+
+                const catPool = ["fps", "fps", "aventura", "arcade", "io", "puzzle", "anime", "clickjogos"];
+
+                let count = gamesDatabase.length;
+                
+                while (count < 1000) {
+                    const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
+                    const nou = nouns[Math.floor(Math.random() * nouns.length)];
+                    const suf = suffixes[Math.floor(Math.random() * suffixes.length)];
+                    const generatedName = `${pre} ${nou} ${suf} ${count}`; // Adicionado ID para nome ser único para os Favoritos
+                    
+                    const randomCat = catPool[Math.floor(Math.random() * catPool.length)];
+                    const categoryLinks = validLinks[randomCat];
+                    const randomUrl = categoryLinks[Math.floor(Math.random() * categoryLinks.length)];
+                    const randomImageId = imageLibrary[count % imageLibrary.length];
+
+                    let icon = "🎮";
+                    let desc = "Motor aberto, sem bloqueios. Jogue diretamente do seu navegador com alta performance.";
+                    let coverGenerated = proxy + `cdn.akamai.steamstatic.com/steam/apps/${randomImageId}/header.jpg`;
+
+                    if(randomCat === 'fps') { 
+                        icon = "🔫"; desc = "Gatilho rápido! Servidores multijogador em tempo real, sem instalação."; 
+                    } else if(randomCat === 'io') { 
+                        icon = "🌐"; desc = "Conquiste território, bata recordes mundiais e domine a arena aberta."; 
+                    } else if(randomCat === 'anime') { 
+                        icon = "⚔️"; desc = "Lute como os maiores ninjas e heróis das sagas japonesas."; 
+                    } else if(randomCat === 'puzzle') { 
+                        icon = "🧩"; desc = "Lógica e matemática no navegador. Mova as peças e vença o desafio."; 
+                    } else if(randomCat === 'clickjogos') { 
+                        icon = "🕹️"; desc = "A lenda do Click Jogos. Casual, de carregamento rápido e extremamente viciante."; 
+                    } else if(randomCat === 'aventura') {
+                        icon = "🗺️"; desc = "Mundos de blocos e mistérios abertos esperando para serem explorados por você.";
+                    } else if(randomCat === 'arcade') {
+                        icon = "🕹️"; desc = "Fliperama raiz. Tente alcançar a pontuação máxima nas máquinas da web.";
+                    }
+
+                    gamesDatabase.push({
+                        title: generatedName,
+                        icon: icon,
+                        desc: desc,
+                        url: randomUrl,
+                        cat: randomCat,
+                        cover: coverGenerated
+                    });
+                    count++;
+                }
+
+                renderGames(gamesDatabase);
             }
 
             const container = document.getElementById('gamesContainer');
             const gamesCounter = document.getElementById('gamesCounter');
             
-            // O fallback infalível: se uma capa quebrar, entra esse fundo premium de constelação gamer
+            // O fallback infalível
             const fallbackImage = "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=600&q=80";
 
-            // ==========================================
-            // ROLAGEM DE TELA: Intersection Observer (Scroll Reveal)
-            // ==========================================
             const scrollObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('show');
-                        observer.unobserve(entry.target); // Anima apenas 1 vez
+                        observer.unobserve(entry.target); 
                     }
                 });
-            }, { 
-                root: null, 
-                threshold: 0.1, // Revela quando 10% do card aparece
-                rootMargin: "0px 0px -50px 0px" // Dispara um pouco antes de aparecer totalmente
-            });
+            }, { root: null, threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-            // ==========================================
-            // OTIMIZAÇÃO DE RENDERIZAÇÃO DOM FRAGMENT
-            // ==========================================
             function renderGames(games) {
-                gamesCounter.textContent = `${games.length} Jogos Injetados (Rolagem e Capas Otimizadas)`;
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                if(activeFilter === 'fav') {
+                    gamesCounter.textContent = `${games.length} Favoritos Salvos no Banco Local`;
+                } else {
+                    gamesCounter.textContent = `${games.length} Jogos Injetados (Banco Local IndexedDB Ativo)`;
+                }
+
                 let htmlString = '';
 
                 games.forEach((game, index) => {
@@ -855,10 +966,14 @@
                     else if(game.cat === 'aventura') catLabel = 'Aventura';
                     else if(game.cat === 'arcade') catLabel = 'Arcade';
 
-                    // Aqui está o "onerror" que impede que qualquer imagem fique em branco
+                    const isFav = myFavorites.has(game.title);
+
                     htmlString += `
                         <div class="game-card">
                             <div class="game-cover">
+                                <div class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFav(event, '${game.title}')" title="Salvar nos Favoritos">
+                                    ${isFav ? '⭐' : '☆'}
+                                </div>
                                 <img src="${game.cover}" onerror="this.onerror=null; this.src='${fallbackImage}';" alt="Capa de ${game.title}" loading="lazy">
                                 <div class="category-tag">${catLabel}</div>
                             </div>
@@ -875,7 +990,6 @@
                 
                 container.innerHTML = htmlString;
                 
-                // Ativa a animação de Scroll em todos os cards gerados
                 document.querySelectorAll('.game-card').forEach(card => {
                     scrollObserver.observe(card);
                 });
@@ -883,10 +997,8 @@
                 attachPlayEvents();
             }
 
-            renderGames(gamesDatabase);
-
             // ==========================================
-            // OTIMIZAÇÃO DE BUSCA: Debounce Engine (Intacto)
+            // OTIMIZAÇÃO DE BUSCA E FILTROS
             // ==========================================
             const searchInput = document.getElementById('searchInput');
             let searchTimeout;
@@ -899,7 +1011,12 @@
                 searchTimeout = setTimeout(() => {
                     const filtered = gamesDatabase.filter(game => {
                         const matchesSearch = game.title.toLowerCase().includes(searchTerm) || game.desc.toLowerCase().includes(searchTerm);
-                        const matchesFilter = activeFilter === 'all' || game.cat === activeFilter;
+                        
+                        let matchesFilter = false;
+                        if(activeFilter === 'all') matchesFilter = true;
+                        else if(activeFilter === 'fav') matchesFilter = myFavorites.has(game.title);
+                        else matchesFilter = game.cat === activeFilter;
+
                         return matchesSearch && matchesFilter;
                     });
                     renderGames(filtered);
@@ -916,7 +1033,11 @@
                     const searchTerm = searchInput.value.toLowerCase();
 
                     const filtered = gamesDatabase.filter(game => {
-                        const matchesFilter = filterValue === 'all' || game.cat === filterValue;
+                        let matchesFilter = false;
+                        if(filterValue === 'all') matchesFilter = true;
+                        else if(filterValue === 'fav') matchesFilter = myFavorites.has(game.title);
+                        else matchesFilter = game.cat === filterValue;
+
                         const matchesSearch = game.title.toLowerCase().includes(searchTerm) || game.desc.toLowerCase().includes(searchTerm);
                         return matchesFilter && matchesSearch;
                     });
@@ -926,7 +1047,7 @@
             });
 
             // ==========================================
-            // MOTOR DE MODAL COMPLETO (PERMISSÃO MÁXIMA NO IFRAME)
+            // MOTOR DE MODAL
             // ==========================================
             const modal = document.getElementById('gameModal');
             const closeModalBtn = document.getElementById('closeModal');
