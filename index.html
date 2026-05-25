@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STEVIN GAMES - A Maior Plataforma de Jogos</title>
+    <title>STEVIN GAMES - A Maior Plataforma de Jogos Online</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -15,7 +15,7 @@
     <div id="perfHud" class="performance-hud"><span id="fpsVal">--</span> FPS</div>
 
     <div class="top-controls">
-        <button id="btnInstallPwa" class="btn-top btn-install">📥 App</button>
+        <button id="btnInstallPwa" class="btn-top btn-install">📥 Instalar App</button>
         <button id="themeToggle" class="btn-top">
             <span id="themeIcon">☀️</span> <span id="themeText">Luz</span>
         </button>
@@ -25,22 +25,30 @@
 
     <header>
         <h1>STEVIN GAMES</h1>
-        <p>Mais de 1000 jogos grátis, sem bloqueios. Escolha sua categoria e jogue agora!</p>
+        <p>Mais de 1000 jogos incríveis em nosso site. APIs oficiais integradas em tempo real!</p>
     </header>
 
-    <div class="games-counter" id="gamesCounter">Carregando motor de alta performance...</div>
+    <div class="games-counter" id="gamesCounter">Iniciando conexão com os servidores das APIs...</div>
 
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título, categoria ou estilo...">
+        <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título, categoria ou estilo de jogo...">
+    </div>
+
+    <div class="api-filters" id="apiFilterContainer">
+        <span class="filter-label">Fonte:</span>
+        <button class="api-btn active" data-api="all">Todas as APIs</button>
+        <button class="api-btn" data-api="gamedistribution">GameDistribution</button>
+        <button class="api-btn" data-api="gamepix">GamePix</button>
+        <button class="api-btn" data-api="crazygames">CrazyGames</button>
     </div>
 
     <div class="filters" id="filterContainer">
-        <button class="filter-btn active" data-filter="all">Todos</button>
-        <button class="filter-btn btn-fav" data-filter="fav">⭐ Favoritos</button>
+        <button class="filter-btn active" data-filter="all">Todos os Gêneros</button>
+        <button class="filter-btn btn-fav" data-filter="fav">⭐ Meus Favoritos</button>
         <button class="filter-btn" data-filter="acao">Ação & FPS</button>
-        <button class="filter-btn" data-filter="arcade">Arcade & Friv</button>
-        <button class="filter-btn" data-filter="corrida">Corrida</button>
-        <button class="filter-btn" data-filter="io">.IO & Arena</button>
+        <button class="filter-btn" data-filter="arcade">Arcade & Clássicos</button>
+        <button class="filter-btn" data-filter="corrida">Corrida & Velocidade</button>
+        <button class="filter-btn" data-filter="io">Estratégia .IO</button>
         <button class="filter-btn" data-filter="aventura">Aventura & RPG</button>
         <button class="filter-btn" data-filter="esporte">Esportes</button>
         <button class="filter-btn" data-filter="puzzle">Quebra-Cabeça</button>
@@ -49,13 +57,14 @@
     <div class="container" id="gamesContainer">
         </div>
 
-    <a href="#" class="discord-btn" title="Junte-se à comunidade!">💬</a>
+    <a href="#" class="discord-btn" id="discordLink" title="Junte-se à nossa comunidade de jogadores!">💬</a>
 
     <div class="modal-overlay" id="gameModal">
         <div class="modal-content" id="modalContent">
             <button class="cinema-toggle-btn" id="cinemaToggle">🎬 Modo Cinema</button>
             <span class="close-modal" id="closeModal">&times;</span>
-            <div id="modalBody" style="display: flex; flex-direction: column; flex-grow: 1; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative;"></div>
+            
+            <div id="modalBody" class="modal-game-body"></div>
         </div>
     </div>
 
