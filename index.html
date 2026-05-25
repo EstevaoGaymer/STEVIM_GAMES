@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STEVIN GAMES - App Premium</title>
+    <!-- Conexão com o Manifest do PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     
@@ -740,6 +741,7 @@
 </head>
 <body class="dark-mode">
 
+    <!-- HUD DE PERFORMANCE TÁTICO E COMPACTO -->
     <div id="perfHud" class="performance-hud"><span id="fpsVal">--</span> FPS</div>
 
     <div class="top-controls">
@@ -777,7 +779,8 @@
     </div>
 
     <div class="container" id="gamesContainer">
-        </div>
+        <!-- O DOM VIRTUAL SERÁ INJETADO AQUI -->
+    </div>
 
     <a href="#" class="discord-btn" title="Junte-se à comunidade!">💬</a>
 
@@ -811,7 +814,7 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.style.display = 'flex'; // Exibe o botão de instalar
+            installBtn.style.display = 'flex'; 
         });
 
         installBtn.addEventListener('click', async () => {
@@ -1037,7 +1040,7 @@
             }
 
             // ==========================================
-            // MOTOR PROCEDURAL 1000 JOGOS
+            // MOTOR PROCEDURAL 1200 JOGOS (+ HITS FAMOSOS)
             // ==========================================
             const gamesDatabase = [];
             
@@ -1046,7 +1049,23 @@
                 const initialGames = [
                     { title: "Papa's Burgeria", icon: "🍔", desc: "A lenda do Click Jogos! Anote pedidos, asse hambúrgueres e sirva os clientes no tempo certo.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "clickjogos", cover: proxy + "images.crazygames.com/papas-burgeria/cover-1586285189392.png", device: "Ambos" },
                     { title: "Moto X3M Clássico", icon: "🏍️", desc: "O mais famoso jogo de motocross do Friv. Faça manobras incríveis.", url: "https://gamesnacks.com/embed/games/retrodrift", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/moto-x3m/cover-1586285096181.png", device: "Ambos" },
-                    { title: "Fireboy & Watergirl", icon: "🔥💧", desc: "A aventura cooperativa suprema do Click Jogos.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png", device: "PC" },
+                    
+                    // FRANQUIA FIREBOY & WATERGIRL COMPLETADA
+                    { title: "Fireboy & Watergirl: Templo da Floresta", icon: "🔥💧", desc: "O clássico cooperativo supremo.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png", device: "PC" },
+                    { title: "Fireboy & Watergirl 2: Templo da Luz", icon: "💡", desc: "Use a luz e os espelhos para desvendar os labirintos e avançar.", url: "https://html5.gamedistribution.com/15eb1d2b704c4b578c74bd2b41506db8/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg", device: "PC" },
+                    { title: "Fireboy & Watergirl 3: Templo de Gelo", icon: "❄️", desc: "Escorregue pelo gelo e use os raios para derreter a água.", url: "https://html5.gamedistribution.com/5f727ab1cc0d4c8dbf436d24f0c45582/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg", device: "PC" },
+                    
+                    // GRANDES SUCESSOS DA WEB ADICIONADOS
+                    { title: "Slope Runner", icon: "⚽", desc: "Sobreviva o máximo que puder descendo a ladeira em alta velocidade.", url: "https://slope-game.github.io/run/", cat: "arcade", cover: proxy + "slope-game.github.io/logo.png", device: "Ambos" },
+                    { title: "Smash Karts IO", icon: "🏎️", desc: "Acelere seu kart, pegue armas malucas e elimine todos na arena.", url: "https://smashkarts.io/", cat: "io", cover: proxy + "smashkarts.io/img/thumbnail.png", device: "Ambos" },
+                    { title: "1v1.LOL", icon: "🏗️", desc: "Construa defesas e lute contra outros jogadores neste clássico simulador de batalha.", url: "https://1v1.lol/", cat: "fps", cover: proxy + "1v1.lol/favicon.ico", device: "Ambos" },
+                    { title: "Krunker.io", icon: "🎯", desc: "Atirador rápido, direto no navegador. Pule, mire e faça sua melhor play.", url: "https://krunker.io/", cat: "fps", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1408720/header.jpg", device: "PC" },
+                    { title: "Skribbl.io", icon: "🖍️", desc: "O melhor jogo de desenho e adivinhação. Chame seus amigos e divirta-se.", url: "https://skribbl.io/", cat: "puzzle", cover: proxy + "skribbl.io/img/logo.png", device: "Ambos" },
+                    { title: "Hole.io", icon: "🕳️", desc: "Engula tudo o que vir pela frente. Quanto mais come, maior você fica.", url: "https://hole-io.com/", cat: "io", cover: proxy + "hole-io.com/assets/img/icon.png", device: "Ambos" },
+                    { title: "Paper.io 2", icon: "📜", desc: "Conquiste territórios pintando a tela. Cuidado para não cortarem sua linha.", url: "https://paper-io.com/", cat: "io", cover: proxy + "paper-io.com/assets/img/icon.png", device: "Ambos" },
+                    { title: "Retro Bowl", icon: "🏈", desc: "O lendário jogo de futebol americano estilo retrô, completo no seu navegador.", url: "https://retrobowl.github.io/", cat: "arcade", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1557990/header.jpg", device: "Ambos" },
+                    { title: "Cookie Clicker", icon: "🍪", desc: "O clássico original de Idle. Clique no biscoito infinitamente.", url: "https://cookieclicker.github.io/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1454400/header.jpg", device: "Ambos" },
+
                     { title: "Venge.io", icon: "🔫", desc: "Um dos melhores jogos de tiro multijogador focados em objetivos da web.", url: "https://venge.io/", cat: "fps", cover: proxy + "i.ytimg.com/vi/W4k0r-k9yT0/maxresdefault.jpg", device: "PC" },
                     { title: "Ev.io Arena", icon: "🎯", desc: "Atirador FPS futurista no estilo Halo, rápido e direto no navegador.", url: "https://ev.io/", cat: "fps", cover: proxy + "ev.io/sites/default/files/2021-02/evio_promo.jpg", device: "PC" },
                     { title: "Subway Surfers Web", icon: "🛹", desc: "Corra pelos trilhos e colete moedas de ouro sem parar. Sem instalação.", url: "https://eggycar.github.io/subwaysurfers/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg", device: "Ambos" },
@@ -1057,21 +1076,25 @@
                 gamesDatabase.push(...initialGames);
 
                 const imageLibrary = ["730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520"];
-                const prefixes = ["Elite", "Super", "Ninja", "Friv", "Pocket", "Grand", "Cyber", "Dark"];
-                const nouns = ["Strike", "Arena", "Dash", "Legends", "World", "Sword", "Run", "Shooter"];
+                const prefixes = ["Elite", "Super", "Ninja", "Friv", "Pocket", "Grand", "Cyber", "Dark", "Hyper", "Ultra", "Pixel"];
+                const nouns = ["Strike", "Arena", "Dash", "Legends", "World", "Sword", "Run", "Shooter", "Racer", "Quest"];
                 
                 const validLinks = {
                     fps: { url: "https://ev.io/", dev: "PC" },
                     io: { url: "https://hole-io.com/", dev: "Ambos" },
                     clickjogos: { url: "https://eggycar.github.io/subwaysurfers/", dev: "Ambos" },
-                    arcade: { url: "https://hextris.io/", dev: "Ambos" }
+                    arcade: { url: "https://slope-game.github.io/run/", dev: "Ambos" },
+                    puzzle: { url: "https://skribbl.io/", dev: "Ambos" },
+                    aventura: { url: "https://classic.minecraft.net/", dev: "PC" },
+                    anime: { url: "https://venge.io/", dev: "PC" }
                 };
                 
-                const catPool = ["fps", "arcade", "io", "clickjogos"];
+                const catPool = ["fps", "arcade", "io", "clickjogos", "puzzle", "aventura", "anime"];
 
                 let count = gamesDatabase.length;
                 
-                while (count < 1000) {
+                // MOTOR PROCEDURAL AUMENTADO PARA 1200 JOGOS
+                while (count < 1200) {
                     const randomCat = catPool[Math.floor(Math.random() * catPool.length)];
                     const target = validLinks[randomCat];
                     
@@ -1118,6 +1141,10 @@
 
             function generateCardHTML(game) {
                 let catLabel = game.cat === 'fps' ? 'Ação & FPS' : game.cat === 'io' ? 'IO' : game.cat === 'clickjogos' ? 'Click Jogos' : 'Arcade';
+                if(game.cat === 'puzzle') catLabel = 'Puzzle';
+                if(game.cat === 'aventura') catLabel = 'Aventura';
+                if(game.cat === 'anime') catLabel = 'Anime';
+
                 const isFav = myFavorites.has(game.title);
                 const devIcon = game.device === 'PC' ? '💻 PC' : game.device === 'Mobile' ? '📱 Mobile' : '💻📱 Ambos';
                 const devClass = game.device === 'PC' ? 'device-pc' : 'device-mobile';
@@ -1148,12 +1175,13 @@
             function renderVirtualGrid(games) {
                 currentFilteredGames = games;
                 const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-                gamesCounter.textContent = `${games.length} Jogos Renderizados (DOM Virtual Ativo)`;
                 
-                container.innerHTML = ''; // Limpa slots antigos
+                // Mensagem de log atualizada para demonstrar os 1200
+                gamesCounter.textContent = `${games.length} Jogos Renderizados no Motor Virtual (Limite 1200)`;
+                
+                container.innerHTML = ''; 
                 virtualObserver.disconnect();
 
-                // Cria slots ocos super leves para a Grid CSS calcular a rolagem perfeita
                 games.forEach((game, index) => {
                     const slot = document.createElement('div');
                     slot.className = 'game-card-wrapper';
@@ -1163,7 +1191,7 @@
                 });
             }
 
-            // Delegação de Eventos (Padrão de arquitetura para DOM Virtualizado)
+            // Delegação de Eventos
             container.addEventListener('click', (e) => {
                 const playBtn = e.target.closest('.btn-play');
                 const favStar = e.target.closest('.fav-star');
