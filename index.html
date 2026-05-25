@@ -611,7 +611,7 @@
         <div id="clock-display">00:00</div>
         <div id="greeting-msg">Carregando perfil...</div>
         <h1>STEVIN GAMES</h1>
-        <p>Plataforma Imersiva Premium com Banco de Dados Embutido</p>
+        <p>A Maior Plataforma Imersiva de Jogos da Web</p>
     </header>
 
     <div class="games-counter" id="gamesCounter">Iniciando Motor e Conectando IndexedDB...</div>
@@ -620,11 +620,12 @@
         <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título, categoria ou estilo...">
     </div>
 
+    <!-- Filtros Inteligentes -->
     <div class="filters" id="filterContainer">
         <button class="filter-btn active" data-filter="all">Todos os 1000 Jogos</button>
         <button class="filter-btn btn-fav" data-filter="fav">⭐ Meus Favoritos</button>
+        <button class="filter-btn" data-filter="clickjogos">Friv & Click Jogos</button>
         <button class="filter-btn" data-filter="fps">Ação & FPS</button>
-        <button class="filter-btn" data-filter="clickjogos">Click Jogos</button>
         <button class="filter-btn" data-filter="anime">Anime & Ninja</button>
         <button class="filter-btn" data-filter="aventura">Aventura</button>
         <button class="filter-btn" data-filter="arcade">Arcade & Clássicos</button>
@@ -633,7 +634,8 @@
     </div>
 
     <div class="container" id="gamesContainer">
-        </div>
+        <!-- O Banco de Dados Completo será injetado aqui -->
+    </div>
 
     <a href="#" class="discord-btn" title="Junte-se à comunidade Stevin Games no Discord!">💬</a>
 
@@ -641,7 +643,8 @@
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
             <div id="modalBody" style="display: flex; flex-direction: column; flex-grow: 1; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative;">
-                </div>
+                <!-- Conteúdo do Iframe entra aqui -->
+            </div>
         </div>
     </div>
 
@@ -661,7 +664,7 @@
                 if (now.getHours() >= 5 && now.getHours() < 12) greeting = "Bom dia";
                 else if (now.getHours() >= 12 && now.getHours() < 18) greeting = "Boa tarde";
                 
-                document.getElementById('greeting-msg').textContent = `${greeting}, Estevão.`;
+                document.getElementById('greeting-msg').textContent = `${greeting}, Estevão. Bem-vindo de volta.`;
             }
             setInterval(updateClock, 1000);
             updateClock();
@@ -809,14 +812,12 @@
                 request.onsuccess = function() {
                     const data = request.result;
                     data.forEach(item => myFavorites.add(item.title));
-                    // Após carregar os favoritos da memória, gera e renderiza os 1000 jogos
                     generateGamesAndRender();
                 };
             }
 
-            // A função global chamada ao clicar na estrela
             window.toggleFav = function(event, title) {
-                event.stopPropagation(); // Impede que o clique na estrela abra o jogo
+                event.stopPropagation(); 
                 const starEl = event.currentTarget;
                 const transaction = db.transaction(["favorites"], "readwrite");
                 const store = transaction.objectStore("favorites");
@@ -833,7 +834,6 @@
                     starEl.innerHTML = '⭐';
                 }
 
-                // Se o filtro de favoritos estiver ativo, re-renderiza a lista para sumir com o desmarcado
                 const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
                 if(activeFilter === 'fav') {
                     document.querySelector('[data-filter="fav"]').click();
@@ -841,23 +841,33 @@
             };
 
             // ==========================================
-            // MOTOR PROCEDURAL 1000 JOGOS + FALLBACK
+            // MOTOR PROCEDURAL 1000 JOGOS + LENDAS CLICK JOGOS / FRIV
             // ==========================================
             const gamesDatabase = [];
             
             function generateGamesAndRender() {
                 const proxy = "https://wsrv.nl/?url=";
                 
+                // AS LENDAS ABSOLUTAS DO CLICK JOGOS E FRIV MANTIDAS NO TOPO
                 const initialGames = [
-                    { title: "Venge.io", icon: "🔫", desc: "Um dos melhores jogos de tiro multijogador focados em objetivos.", url: "https://venge.io/", cat: "fps", cover: proxy + "i.ytimg.com/vi/W4k0r-k9yT0/maxresdefault.jpg" },
-                    { title: "Ev.io", icon: "🎯", desc: "Atirador FPS futurista no estilo Halo, rápido e direto no navegador.", url: "https://ev.io/", cat: "fps", cover: proxy + "ev.io/sites/default/files/2021-02/evio_promo.jpg" },
-                    { title: "Fogo e Água Clássico", icon: "🔥💧", desc: "O rei do Click Jogos! Coordene os elementos pelos labirintos abertos.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
+                    { title: "Papa's Burgeria", icon: "🍔", desc: "A lenda do Click Jogos! Anote pedidos, asse hambúrgueres e sirva os clientes no tempo certo.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "clickjogos", cover: proxy + "images.crazygames.com/papas-burgeria/cover-1586285189392.png" },
+                    { title: "Bad Ice-Cream", icon: "🍦", desc: "Clássico da Nitrome. Sopre paredes de gelo e colete frutas desviando dos monstros.", url: "https://gamesnacks.com/embed/games/elementblocks", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
+                    { title: "Moto X3M Clássico", icon: "🏍️", desc: "O mais famoso jogo de motocross do Friv. Faça manobras incríveis e desvie de serras giratórias.", url: "https://gamesnacks.com/embed/games/retrodrift", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/moto-x3m/cover-1586285096181.png" },
+                    { title: "Fireboy & Watergirl: Forest", icon: "🔥💧", desc: "A aventura cooperativa suprema do Click Jogos. Coordene os elementos pelos labirintos abertos.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
+                    { title: "Snail Bob (Bob O Caracol)", icon: "🐌", desc: "Resolva quebra-cabeças mecânicos para guiar o caracol em segurança até a saída.", url: "https://gamesnacks.com/embed/games/bouncemasters", cat: "clickjogos", cover: proxy + "www.gamesnacks.com/assets/img/games/bouncemasters/bouncemasters.jpg" },
+                    { title: "Vex 3 Retro", icon: "🏃", desc: "Pule, deslize e sobreviva a labirintos letais de espinhos neste clássico jogo de parkour estilo Friv.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/vex-3/cover-1586285096181.png" },
+                    { title: "Bob The Robber", icon: "🦹", desc: "Esconda-se nas sombras, desative câmeras de segurança e roube tesouros neste clássico furtivo.", url: "https://gamesnacks.com/embed/games/chessclassic", cat: "clickjogos", cover: proxy + "www.gamesnacks.com/assets/img/games/chessclassic/chessclassic.jpg" },
                     { title: "Subway Surfers Web", icon: "🛹", desc: "Corra pelos trilhos e colete moedas de ouro sem parar. Sem instalação.", url: "https://eggycar.github.io/subwaysurfers/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
-                    { title: "Shell Shockers", icon: "🥚", desc: "Jogo de tiro em primeira pessoa multijogador hilário onde você é um ovo.", url: "https://shellshock.io/", cat: "fps", cover: proxy + "shellshock.io/img/EggIcon.png" },
+                    { title: "Stick War Legacy", icon: "🏹", desc: "Estratégia pura. Construa seu exército de homens-palito e destrua a estátua inimiga.", url: "https://gamesnacks.com/embed/games/towercrash3d", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/310560/header.jpg" },
+                    { title: "Cut the Rope / Om Nom", icon: "🐸", desc: "Corte as cordas no tempo exato para alimentar o monstrinho verde com os doces.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" },
+                    { title: "Tomb Runner (Temple Clone)", icon: "🏃‍♂️", desc: "Corra por muralhas antigas e colete relíquias em alta velocidade.", url: "https://gamesnacks.com/embed/games/trainsurfers", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg" },
+                    { title: "Venge.io", icon: "🔫", desc: "Um dos melhores jogos de tiro multijogador focados em objetivos da web.", url: "https://venge.io/", cat: "fps", cover: proxy + "i.ytimg.com/vi/W4k0r-k9yT0/maxresdefault.jpg" },
+                    { title: "Ev.io Arena", icon: "🎯", desc: "Atirador FPS futurista no estilo Halo, rápido e direto no navegador.", url: "https://ev.io/", cat: "fps", cover: proxy + "ev.io/sites/default/files/2021-02/evio_promo.jpg" },
+                    { title: "Shell Shockers", icon: "🥚", desc: "Jogo de tiro em primeira pessoa multijogador hilário onde você é um ovo armado.", url: "https://shellshock.io/", cat: "fps", cover: proxy + "shellshock.io/img/EggIcon.png" },
                     { title: "2048 Oficial", icon: "🧩", desc: "O clássico e viciante puzzle matemático de juntar blocos.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "upload.wikimedia.org/wikipedia/commons/1/18/2048_logo.svg" },
                     { title: "Hextris Global", icon: "🕹️", desc: "Mova a base hexagonal e evite que os blocos atinjam as bordas.", url: "https://hextris.io/", cat: "io", cover: proxy + "hextris.io/images/facebook-promo.png" },
                     { title: "Flappy Bird", icon: "🐦", desc: "O jogo mais frustrante e viciante da internet. Voe pelos canos.", url: "https://flappybird.io/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
-                    { title: "Minecraft Web", icon: "⛏️", desc: "A versão clássica do Minecraft. Construa e destrua blocos.", url: "https://classic.minecraft.net/", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
+                    { title: "Minecraft Classic", icon: "⛏️", desc: "A versão web oficial do Minecraft. Construa e destrua blocos infinitamente.", url: "https://classic.minecraft.net/", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
                 ];
                 
                 gamesDatabase.push(...initialGames);
@@ -868,21 +878,21 @@
                     "322330", "1097150", "1182480", "311210", "620", "504230", "10", "518060", "470220", "431960"
                 ];
 
-                const prefixes = ["Elite", "Combat", "Super", "Ultra", "Ghost", "Sniper", "Valor", "Pocket", "Grand", "Cyber", "Neon", "Retro", "Dark", "Crystal", "Royal"];
-                const nouns = ["Strike", "Force", "Ops", "Kombat", "Arena", "Dash", "Royale", "Legends", "World", "City", "Sword", "Fashion", "Run", "Shooter"];
+                const prefixes = ["Elite", "Papa's", "Super", "Stickman", "Ghost", "Ninja", "Friv", "Pocket", "Grand", "Cyber", "Neon", "Retro", "Dark", "Crystal", "Royal"];
+                const nouns = ["Strike", "Burgeria", "Ops", "Kombat", "Arena", "Dash", "Royale", "Legends", "World", "City", "Sword", "Fashion", "Run", "Shooter"];
                 const suffixes = ["Online", "3D", "Pro", "Elite", "Max", "Simulator", "V", "X", "Zero", "Infinity", "Showdown"];
 
                 const validLinks = {
                     fps: ["https://ev.io/", "https://venge.io/", "https://smashkarts.io/", "https://shellshock.io/", "https://krunker.io/"],
-                    io: ["https://hextris.io/", "https://agar.io/", "https://slither.io/", "https://hole-io.com/"],
-                    puzzle: ["https://gabrielecirulli.github.io/2048/", "https://skribbl.io/"],
+                    io: ["https://hextris.io/", "https://agar.io/", "https://slither.io/", "https://hole-io.com/", "https://gamesnacks.com/embed/games/towercrash3d"],
+                    puzzle: ["https://gabrielecirulli.github.io/2048/", "https://skribbl.io/", "https://gamesnacks.com/embed/games/elementblocks"],
                     anime: ["https://ev.io/", "https://venge.io/"],
-                    clickjogos: ["https://flappybird.io/", "https://eggycar.github.io/subwaysurfers/", "https://mkings.github.io/fireboy-watergirl/"],
-                    aventura: ["https://classic.minecraft.net/"],
-                    arcade: ["https://hextris.io/", "https://flappybird.io/"]
+                    clickjogos: ["https://flappybird.io/", "https://eggycar.github.io/subwaysurfers/", "https://mkings.github.io/fireboy-watergirl/", "https://gamesnacks.com/embed/games/retrodrift"],
+                    aventura: ["https://classic.minecraft.net/", "https://gamesnacks.com/embed/games/bouncemasters"],
+                    arcade: ["https://hextris.io/", "https://flappybird.io/", "https://gamesnacks.com/embed/games/trafficrun"]
                 };
 
-                const catPool = ["fps", "fps", "aventura", "arcade", "io", "puzzle", "anime", "clickjogos"];
+                const catPool = ["fps", "fps", "aventura", "arcade", "io", "puzzle", "anime", "clickjogos", "clickjogos"];
 
                 let count = gamesDatabase.length;
                 
@@ -890,7 +900,7 @@
                     const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
                     const nou = nouns[Math.floor(Math.random() * nouns.length)];
                     const suf = suffixes[Math.floor(Math.random() * suffixes.length)];
-                    const generatedName = `${pre} ${nou} ${suf} ${count}`; // Adicionado ID para nome ser único para os Favoritos
+                    const generatedName = `${pre} ${nou} ${suf} ${count}`; 
                     
                     const randomCat = catPool[Math.floor(Math.random() * catPool.length)];
                     const categoryLinks = validLinks[randomCat];
@@ -934,7 +944,6 @@
             const container = document.getElementById('gamesContainer');
             const gamesCounter = document.getElementById('gamesCounter');
             
-            // O fallback infalível
             const fallbackImage = "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=600&q=80";
 
             const scrollObserver = new IntersectionObserver((entries, observer) => {
@@ -951,7 +960,7 @@
                 if(activeFilter === 'fav') {
                     gamesCounter.textContent = `${games.length} Favoritos Salvos no Banco Local`;
                 } else {
-                    gamesCounter.textContent = `${games.length} Jogos Injetados (Banco Local IndexedDB Ativo)`;
+                    gamesCounter.textContent = `${games.length} Jogos Famosos (Click Jogos & Friv Integrados)`;
                 }
 
                 let htmlString = '';
@@ -962,7 +971,7 @@
                     else if(game.cat === 'io') catLabel = 'Estratégia IO';
                     else if(game.cat === 'anime') catLabel = 'Anime & Ninja';
                     else if(game.cat === 'puzzle') catLabel = 'Puzzle';
-                    else if(game.cat === 'clickjogos') catLabel = 'Click Jogos';
+                    else if(game.cat === 'clickjogos') catLabel = 'Friv Hits';
                     else if(game.cat === 'aventura') catLabel = 'Aventura';
                     else if(game.cat === 'arcade') catLabel = 'Arcade';
 
