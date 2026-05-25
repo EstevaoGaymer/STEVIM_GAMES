@@ -73,6 +73,29 @@
             will-change: transform, opacity;
         }
 
+        /* MONITOR GAMER INTEGRADO (HUD PERFORMANCE) */
+        .performance-hud {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--primary-accent);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #fbbf24;
+            z-index: 99999;
+            pointer-events: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: block;
+            border-left: 4px solid var(--primary-accent);
+        }
+
         .theme-toggle {
             position: absolute;
             top: 30px;
@@ -316,7 +339,6 @@
             transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease;
         }
         
-        /* Botão de Estrela (Favoritos) */
         .fav-star {
             position: absolute;
             top: 15px;
@@ -453,6 +475,7 @@
 
         body:not(.dark-mode) .btn-play:hover { color: #ffffff; }
 
+        /* MODAL E INTERFACES DE IMERSÃO */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -466,6 +489,14 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            transition: background 0.5s ease;
+        }
+
+        /* Máscara de Vinheta do Modo Cinema Extremo */
+        .modal-overlay.cinema-mode-active {
+            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(2,6,23,1) 90%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
         }
 
         .modal-content {
@@ -483,6 +514,13 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: box-shadow 0.6s ease, border-color 0.6s ease;
+        }
+
+        /* Flash de Estúdio / Alta Exposição Ouro do Modo Cinema */
+        .modal-content.cinema-lighting {
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 150px rgba(251, 191, 36, 0.95), inset 0 0 40px rgba(251, 191, 36, 0.3) !important;
         }
 
         .close-modal {
@@ -508,6 +546,39 @@
             border-color: var(--secondary-accent);
             transform: rotate(90deg) scale(1.1);
             box-shadow: 0 0 20px var(--secondary-accent);
+        }
+
+        /* Botão Interativo do Modo Cinema */
+        .cinema-toggle-btn {
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 0.6rem 1.4rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.9rem;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cinema-toggle-btn:hover {
+            background: #fbbf24;
+            color: #020617;
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+            transform: scale(1.05);
+        }
+        
+        .cinema-toggle-btn.active {
+            background: #fbbf24;
+            color: #020617;
+            border-color: #fbbf24;
         }
 
         .loader-container {
@@ -601,6 +672,8 @@
 </head>
 <body>
 
+    <div id="perfHud" class="performance-hud">⚙️ PERF HUD: <span id="fpsVal">--</span> FPS</div>
+
     <button id="themeToggle" class="theme-toggle">
         <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
     </button>
@@ -609,7 +682,7 @@
 
     <header>
         <div id="clock-display">00:00</div>
-        <div id="greeting-msg">Carregando perfil...</div>
+        <div id="greeting-msg">Carregando painel táctico...</div>
         <h1>STEVIN GAMES</h1>
         <p>A Maior Plataforma Imersiva de Jogos da Web</p>
     </header>
@@ -620,7 +693,6 @@
         <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título, categoria ou estilo...">
     </div>
 
-    <!-- Filtros Inteligentes -->
     <div class="filters" id="filterContainer">
         <button class="filter-btn active" data-filter="all">Todos os 1000 Jogos</button>
         <button class="filter-btn btn-fav" data-filter="fav">⭐ Meus Favoritos</button>
@@ -634,17 +706,16 @@
     </div>
 
     <div class="container" id="gamesContainer">
-        <!-- O Banco de Dados Completo será injetado aqui -->
-    </div>
+        </div>
 
     <a href="#" class="discord-btn" title="Junte-se à comunidade Stevin Games no Discord!">💬</a>
 
     <div class="modal-overlay" id="gameModal">
-        <div class="modal-content">
+        <div class="modal-content" id="modalContent">
+            <button class="cinema-toggle-btn" id="cinemaToggle">🎬 Modo Cinema</button>
             <span class="close-modal" id="closeModal">&times;</span>
             <div id="modalBody" style="display: flex; flex-direction: column; flex-grow: 1; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative;">
-                <!-- Conteúdo do Iframe entra aqui -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -652,7 +723,35 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // ==========================================
-            // RELÓGIO E SAUDAÇÃO PERSONALIZADA
+            // MOTOR DO MONITOR GAMER (HUD FPS)
+            // ==========================================
+            let lastTime = performance.now();
+            let frameCount = 0;
+            let fps = 0;
+            const fpsValEl = document.getElementById('fpsVal');
+
+            function calculatePerformance(time) {
+                frameCount++;
+                if (time > lastTime + 500) { // Atualiza a cada meio segundo para precisão estável
+                    fps = Math.round((frameCount * 1000) / (time - lastTime));
+                    fpsValEl.textContent = fps;
+                    frameCount = 0;
+                    lastTime = time;
+                }
+                requestAnimationFrame(calculatePerformance);
+            }
+            requestAnimationFrame(calculatePerformance);
+
+            // Atalho de Teclado F2 para Ocultar/Exibir o HUD
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'F2') {
+                    const hud = document.getElementById('perfHud');
+                    hud.style.display = hud.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+
+            // ==========================================
+            // RELÓGIO E SAUDAÇÃO PERSONALIZADA (LIMPA SEM NOME)
             // ==========================================
             function updateClock() {
                 const now = new Date();
@@ -664,7 +763,7 @@
                 if (now.getHours() >= 5 && now.getHours() < 12) greeting = "Bom dia";
                 else if (now.getHours() >= 12 && now.getHours() < 18) greeting = "Boa tarde";
                 
-                document.getElementById('greeting-msg').textContent = `${greeting}, Estevão. Bem-vindo de volta.`;
+                document.getElementById('greeting-msg').textContent = `${greeting}. Bem-vindo de volta ao comando.`;
             }
             setInterval(updateClock, 1000);
             updateClock();
@@ -698,7 +797,7 @@
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
             let particlesArray = [];
-            let isModalOpen = false;
+            let isOriginalModalOpen = false;
 
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -754,7 +853,7 @@
 
             function animateParticles() {
                 requestAnimationFrame(animateParticles);
-                if (!isModalOpen) {
+                if (!isOriginalModalOpen) {
                     ctx.clearRect(0, 0, innerWidth, innerHeight);
                     for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); }
                     connectParticles();
@@ -848,7 +947,6 @@
             function generateGamesAndRender() {
                 const proxy = "https://wsrv.nl/?url=";
                 
-                // AS LENDAS ABSOLUTAS DO CLICK JOGOS E FRIV MANTIDAS NO TOPO
                 const initialGames = [
                     { title: "Papa's Burgeria", icon: "🍔", desc: "A lenda do Click Jogos! Anote pedidos, asse hambúrgueres e sirva os clientes no tempo certo.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "clickjogos", cover: proxy + "images.crazygames.com/papas-burgeria/cover-1586285189392.png" },
                     { title: "Bad Ice-Cream", icon: "🍦", desc: "Clássico da Nitrome. Sopre paredes de gelo e colete frutas desviando dos monstros.", url: "https://gamesnacks.com/embed/games/elementblocks", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
@@ -1056,10 +1154,12 @@
             });
 
             // ==========================================
-            // MOTOR DE MODAL
+            // MOTOR DE MODAL COM SUPORTE A MODO CINEMA
             // ==========================================
             const modal = document.getElementById('gameModal');
+            const modalContent = document.getElementById('modalContent');
             const closeModalBtn = document.getElementById('closeModal');
+            const cinemaToggleBtn = document.getElementById('cinemaToggle');
             const modalBody = document.getElementById('modalBody');
 
             function attachPlayEvents() {
@@ -1067,7 +1167,7 @@
                 playButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         const gameUrl = e.target.getAttribute('data-url');
-                        isModalOpen = true; 
+                        isOriginalModalOpen = true; 
 
                         modalBody.innerHTML = `
                             <div class="loader-container" id="modalLoaderContainer">
@@ -1089,17 +1189,39 @@
                 });
             }
 
+            // Ação do Botão do Modo Cinema
+            cinemaToggleBtn.addEventListener('click', () => {
+                modal.classList.toggle('cinema-mode-active');
+                modalContent.classList.toggle('cinema-lighting');
+                cinemaToggleBtn.classList.toggle('active');
+                
+                if (cinemaToggleBtn.classList.contains('active')) {
+                    cinemaToggleBtn.textContent = "🎬 Foco Ativo";
+                } else {
+                    cinemaToggleBtn.textContent = "🎬 Modo Cinema";
+                }
+            });
+
+            function resetCinemaMode() {
+                modal.classList.remove('cinema-mode-active');
+                modalContent.classList.remove('cinema-lighting');
+                cinemaToggleBtn.classList.remove('active');
+                cinemaToggleBtn.textContent = "🎬 Modo Cinema";
+            }
+
             closeModalBtn.addEventListener('click', () => {
                 modal.style.display = 'none';
                 modalBody.innerHTML = ''; 
-                isModalOpen = false; 
+                isOriginalModalOpen = false; 
+                resetCinemaMode();
             });
 
             window.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.style.display = 'none';
                     modalBody.innerHTML = '';
-                    isModalOpen = false;
+                    isOriginalModalOpen = false;
+                    resetCinemaMode();
                 }
             });
         });
