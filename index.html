@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STEVIN GAMES - 1000 Jogos Premium & App</title>
+    <title>STEVIN GAMES - App Premium</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    
     <style>
         /* =========================================
            CSS TEMA PREMIUM - CLARO E ESCURO DINÂMICO
-           Hardware Accelerated, Glassmorphism, Scroll Reveal & IndexedDB
+           Glassmorphism, Scroll Reveal, IndexedDB, PWA & Virtual DOM
            ========================================= */
         :root {
             --bg-color: #f0f4f8; 
@@ -34,668 +37,736 @@
             --shadow-color: rgba(0, 0, 0, 0.4);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
         }
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb {
-            background: var(--text-muted);
-            border-radius: 6px;
-            border: 3px solid var(--bg-color);
-        }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary-accent); }
-
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-attachment: fixed;
-            position: relative;
-            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+        ::-webkit-scrollbar { 
+            width: 12px; 
         }
 
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            will-change: transform, opacity;
+        ::-webkit-scrollbar-track { 
+            background: var(--bg-color); 
         }
 
-        /* MONITOR GAMER INTEGRADO (HUD PERFORMANCE) */
+        ::-webkit-scrollbar-thumb { 
+            background: var(--text-muted); 
+            border-radius: 6px; 
+            border: 3px solid var(--bg-color); 
+        }
+
+        ::-webkit-scrollbar-thumb:hover { 
+            background: var(--primary-accent); 
+        }
+
+        body { 
+            background: var(--bg-gradient); 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            background-attachment: fixed; 
+            position: relative; 
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease; 
+        }
+
+        #particles-canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -1; 
+            pointer-events: none; 
+            will-change: transform, opacity; 
+        }
+
+        /* HUD FPS MINIMALISTA E TÁTICO */
         .performance-hud {
             position: fixed;
-            top: 25px;
-            left: 25px;
+            top: 20px;
+            left: 20px;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--primary-accent);
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #fbbf24;
             z-index: 99999;
             pointer-events: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            font-weight: bold;
-            letter-spacing: 1px;
-            display: block;
-            border-left: 4px solid var(--primary-accent);
-        }
-
-        .theme-toggle {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            background: var(--surface-color);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 800;
-            font-size: 1.05rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-weight: 900;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
-            box-shadow: 0 10px 25px var(--shadow-color);
-            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            text-transform: uppercase;
+            gap: 5px;
+        }
+
+        .performance-hud span { 
+            color: #fff; 
+        }
+
+        .top-controls { 
+            position: absolute; 
+            top: 30px; 
+            right: 40px; 
+            display: flex; 
+            gap: 15px; 
+            z-index: 100; 
+            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
+
+        .btn-top {
+            background: var(--surface-color); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            border: 2px solid var(--glass-border); 
+            color: var(--text-main); 
+            padding: 0.8rem 1.5rem; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 800; 
+            font-size: 1.05rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 10px 25px var(--shadow-color); 
+            text-transform: uppercase; 
             letter-spacing: 1px;
         }
 
-        .theme-toggle:hover {
-            transform: translateY(-5px) scale(1.05);
-            border-color: var(--primary-accent);
-            color: var(--primary-accent);
-            box-shadow: 0 15px 35px rgba(251, 191, 36, 0.2);
+        .btn-top:hover { 
+            transform: translateY(-5px) scale(1.05); 
+            border-color: var(--primary-accent); 
+            color: var(--primary-accent); 
+            box-shadow: 0 15px 35px rgba(251, 191, 36, 0.2); 
+        }
+        
+        .btn-install { 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+            color: #000; 
+            border: none; 
+            display: none; 
         }
 
-        @keyframes entradaTriunfal {
-            0% { opacity: 0; transform: translateY(60px) scale(0.92); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+        .btn-install:hover { 
+            color: #000; 
+            box-shadow: 0 15px 35px rgba(251, 191, 36, 0.5); 
         }
 
-        @keyframes glassShine {
-            0% { left: -150%; }
-            100% { left: 150%; }
+        @keyframes entradaTriunfal { 
+            0% { opacity: 0; transform: translateY(60px) scale(0.92); } 
+            100% { opacity: 1; transform: translateY(0) scale(1); } 
         }
 
-        header {
-            text-align: center;
-            padding: 5rem 2rem 3rem 2rem;
-            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            will-change: transform, opacity;
+        @keyframes glassShine { 
+            0% { left: -150%; } 
+            100% { left: 150%; } 
         }
 
-        #clock-display {
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: 3px;
-            color: var(--primary-accent);
-            margin-bottom: 5px;
-            text-shadow: 0 5px 15px var(--shadow-color);
+        header { 
+            text-align: center; 
+            padding: 6rem 2rem 3rem 2rem; 
+            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            will-change: transform, opacity; 
         }
 
-        #greeting-msg {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        #clock-display { 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            letter-spacing: 3px; 
+            color: var(--primary-accent); 
+            margin-bottom: 5px; 
+            text-shadow: 0 5px 15px var(--shadow-color); 
         }
 
-        h1 {
-            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
-            -webkit-background-clip: text;
-            color: transparent;
+        #greeting-msg { 
+            font-size: 1.2rem; 
+            font-weight: 600; 
+            color: var(--text-muted); 
+            margin-bottom: 2rem; 
+            letter-spacing: 1px; 
+            text-transform: uppercase; 
+        }
+
+        h1 { 
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent)); 
+            -webkit-background-clip: text; 
+            color: transparent; 
             font-size: 4.8rem; 
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            margin-bottom: 1rem;
-            text-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            position: relative;
-            display: inline-block;
-            transition: all var(--transition-speed) ease;
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: 8px; 
+            margin-bottom: 1rem; 
+            text-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); 
+            display: inline-block; 
+            transition: all var(--transition-speed) ease; 
         }
 
-        p {
-            color: var(--text-muted);
-            font-size: 1.4rem;
-            letter-spacing: 1.5px;
-            font-weight: 500;
-            transition: color var(--transition-speed) ease;
+        p { 
+            color: var(--text-muted); 
+            font-size: 1.4rem; 
+            letter-spacing: 1.5px; 
+            font-weight: 500; 
         }
 
-        .search-container {
-            text-align: center;
-            margin: 0 auto 3rem auto;
-            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 0.15s;
-            opacity: 0;
-            will-change: transform, opacity;
+        .search-container { 
+            text-align: center; 
+            margin: 0 auto 3rem auto; 
+            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            animation-delay: 0.15s; 
+            opacity: 0; 
+            will-change: transform, opacity; 
         }
 
-        .search-input {
-            padding: 1.2rem 2.5rem;
-            width: 85%;
-            max-width: 650px;
-            border-radius: 50px;
-            border: 2px solid var(--glass-border);
-            background-color: var(--surface-color);
-            color: var(--text-main);
-            font-size: 1.15rem;
-            outline: none;
-            transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 15px 35px var(--shadow-color);
-            font-weight: 500;
+        .search-input { 
+            padding: 1.2rem 2.5rem; 
+            width: 85%; 
+            max-width: 650px; 
+            border-radius: 50px; 
+            border: 2px solid var(--glass-border); 
+            background-color: var(--surface-color); 
+            color: var(--text-main); 
+            font-size: 1.15rem; 
+            outline: none; 
+            transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            box-shadow: 0 15px 35px var(--shadow-color); 
+            font-weight: 500; 
         }
 
-        .search-input:focus {
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
-            transform: scale(1.03) translateY(-2px);
-            background-color: var(--bg-color);
+        .search-input:focus { 
+            border-color: var(--primary-accent); 
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.2); 
+            transform: scale(1.03) translateY(-2px); 
+            background-color: var(--bg-color); 
         }
 
-        .filters {
-            text-align: center;
-            margin-bottom: 4rem;
-            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 0.25s;
-            opacity: 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-            padding: 0 1rem;
-            will-change: transform, opacity;
+        .filters { 
+            text-align: center; 
+            margin-bottom: 4rem; 
+            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            animation-delay: 0.25s; 
+            opacity: 0; 
+            display: flex; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            gap: 1.2rem; 
+            padding: 0 1rem; 
+            will-change: transform, opacity; 
         }
 
-        .filter-btn {
-            background: var(--surface-color);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid var(--glass-border);
-            color: var(--text-muted);
-            padding: 0.8rem 2rem;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            font-size: 0.95rem;
-            box-shadow: 0 5px 20px var(--shadow-color);
+        .filter-btn { 
+            background: var(--surface-color); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            border: 2px solid var(--glass-border); 
+            color: var(--text-muted); 
+            padding: 0.8rem 2rem; 
+            border-radius: 40px; 
+            cursor: pointer; 
+            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            font-weight: 700; 
+            letter-spacing: 1.2px; 
+            text-transform: uppercase; 
+            font-size: 0.95rem; 
+            box-shadow: 0 5px 20px var(--shadow-color); 
         }
 
-        .filter-btn:hover {
-            background: rgba(251, 191, 36, 0.1);
-            color: var(--primary-accent);
-            border-color: var(--primary-accent);
-            transform: translateY(-3px);
+        .filter-btn:hover { 
+            background: rgba(251, 191, 36, 0.1); 
+            color: var(--primary-accent); 
+            border-color: var(--primary-accent); 
+            transform: translateY(-3px); 
         }
 
-        .filter-btn.active {
-            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+        .filter-btn.active { 
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent)); 
             color: #ffffff; 
-            border-color: transparent;
-            box-shadow: 0 12px 25px rgba(251, 191, 36, 0.35);
-            transform: translateY(-3px) scale(1.05);
-        }
-        
-        .filter-btn.btn-fav {
-            border-color: #fbbf24;
-            color: #fbbf24;
+            border-color: transparent; 
+            box-shadow: 0 12px 25px rgba(251, 191, 36, 0.35); 
+            transform: translateY(-3px) scale(1.05); 
         }
 
-        .container {
+        .filter-btn.btn-fav { 
+            border-color: #fbbf24; 
+            color: #fbbf24; 
+        }
+
+        .container { 
             max-width: 1600px; 
-            margin: 0 auto 5rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 3rem;
-            content-visibility: auto;
-            contain-intrinsic-size: 1000px;
-        }
-
-        /* EFEITO DE ROLAGEM (SCROLL REVEAL) */
-        .game-card {
-            background-color: var(--surface-color);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 0; 
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease, opacity 0.8s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 15px 35px var(--shadow-color);
-            opacity: 0;
-            transform: translateY(40px) scale(0.95);
-            will-change: transform, opacity, box-shadow;
-        }
-
-        .game-card.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            z-index: 15;
-            transition: none;
-            pointer-events: none;
-        }
-
-        .game-card:hover::before { animation: glassShine 0.8s ease forwards; }
-
-        .game-cover {
-            width: 100%;
-            height: 200px;
-            position: relative;
-            overflow: hidden;
-            background-color: #000;
-            border-bottom: 4px solid var(--primary-accent);
-        }
-
-        .game-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease;
+            margin: 0 auto 5rem auto; 
+            padding: 0 2rem; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 3rem; 
         }
         
-        .fav-star {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.8);
-            z-index: 20;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* SLOTS DE VIRTUALIZAÇÃO DE DOM */
+        .game-card-wrapper { 
+            min-height: 420px; 
+            width: 100%; 
+            border-radius: 20px; 
         }
 
-        .fav-star:hover {
-            transform: scale(1.2) rotate(15deg);
-            background: rgba(0,0,0,0.8);
-            border-color: #fbbf24;
+        .game-card { 
+            background-color: var(--surface-color); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 20px; 
+            padding: 0; 
+            text-align: center; 
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease, opacity 0.8s ease; 
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            box-shadow: 0 15px 35px var(--shadow-color); 
+            animation: fadeInCard 0.5s ease forwards; 
+        }
+        
+        @keyframes fadeInCard { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
         }
 
-        .fav-star.active {
-            color: #fbbf24;
-            border-color: #fbbf24;
-            text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+        .game-card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: -150%; 
+            width: 50%; 
+            height: 100%; 
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); 
+            transform: skewX(-25deg); 
+            z-index: 15; 
+            pointer-events: none; 
         }
 
-        .game-content {
-            padding: 1.8rem 2.2rem 2.2rem 2.2rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-            background: linear-gradient(to bottom, transparent 0%, var(--surface-color) 100%);
+        .game-card:hover::before { 
+            animation: glassShine 0.8s ease forwards; 
         }
 
-        .category-tag {
-            position: absolute;
-            top: 18px;
-            right: -40px;
-            background: linear-gradient(90deg, var(--secondary-accent), var(--primary-accent));
-            color: #ffffff;
-            font-size: 0.8rem;
-            font-weight: 900;
-            padding: 8px 45px;
-            transform: rotate(45deg);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 10;
+        .game-cover { 
+            width: 100%; 
+            height: 200px; 
+            position: relative; 
+            overflow: hidden; 
+            background-color: #000; 
+            border-bottom: 4px solid var(--primary-accent); 
         }
 
-        .game-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
-            transform: scaleX(0);
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2;
-            transform-origin: left;
+        .game-cover img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease; 
+        }
+        
+        /* TAGS DE DISPOSITIVO (MOBILE / PC) */
+        .device-tags { 
+            position: absolute; 
+            bottom: 10px; 
+            right: 10px; 
+            display: flex; 
+            gap: 5px; 
+            z-index: 20; 
         }
 
-        .game-card.show:hover {
-            transform: translateY(-18px) scale(1.03);
-            border-color: var(--primary-accent);
-            box-shadow: 0 30px 60px var(--shadow-color), inset 0 0 30px rgba(255, 255, 255, 0.1);
+        .device-badge { 
+            background: rgba(0,0,0,0.7); 
+            backdrop-filter: blur(5px); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            color: #fff; 
+            padding: 4px 8px; 
+            border-radius: 12px; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            letter-spacing: 1px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5); 
         }
 
-        .game-card.show:hover .game-cover img {
+        .device-pc { 
+            color: #38bdf8; 
+        }
+
+        .device-mobile { 
+            color: #4ade80; 
+        }
+
+        .fav-star { 
+            position: absolute; 
+            top: 15px; 
+            left: 15px; 
+            background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px); 
+            border: 2px solid rgba(255,255,255,0.3); 
+            border-radius: 50%; 
+            width: 45px; 
+            height: 45px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.5rem; 
+            color: rgba(255,255,255,0.8); 
+            z-index: 20; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .fav-star:hover { 
+            transform: scale(1.2) rotate(15deg); 
+            background: rgba(0,0,0,0.8); 
+            border-color: #fbbf24; 
+        }
+
+        .fav-star.active { 
+            color: #fbbf24; 
+            border-color: #fbbf24; 
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.8); 
+        }
+
+        .game-content { 
+            padding: 1.8rem 2.2rem 2.2rem 2.2rem; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+            justify-content: space-between; 
+            background: linear-gradient(to bottom, transparent 0%, var(--surface-color) 100%); 
+        }
+
+        .category-tag { 
+            position: absolute; 
+            top: 18px; 
+            right: -40px; 
+            background: linear-gradient(90deg, var(--secondary-accent), var(--primary-accent)); 
+            color: #ffffff; 
+            font-size: 0.8rem; 
+            font-weight: 900; 
+            padding: 8px 45px; 
+            transform: rotate(45deg); 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            z-index: 10; 
+        }
+        
+        .game-card::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 6px; 
+            background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent)); 
+            transform: scaleX(0); 
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 2; 
+            transform-origin: left; 
+        }
+
+        .game-card:hover { 
+            transform: translateY(-18px) scale(1.03); 
+            border-color: var(--primary-accent); 
+            box-shadow: 0 30px 60px var(--shadow-color), inset 0 0 30px rgba(255, 255, 255, 0.1); 
+        }
+
+        .game-card:hover .game-cover img { 
             transform: scale(1.2) rotate(2deg); 
-            filter: brightness(1.1);
+            filter: brightness(1.1); 
         }
 
-        .game-card.show:hover::after { transform: scaleX(1); }
-
-        .game-title {
-            color: var(--text-main);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            transition: color 0.3s ease;
-            position: relative;
-            z-index: 1;
-            font-weight: 900;
-            letter-spacing: 0.5px;
+        .game-card:hover::after { 
+            transform: scaleX(1); 
         }
 
-        .game-card.show:hover .game-title { color: var(--primary-accent); }
-
-        .game-desc {
-            font-size: 1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            flex-grow: 1;
-            position: relative;
-            z-index: 1;
-            font-weight: 500;
+        .game-title { 
+            color: var(--text-main); 
+            font-size: 1.5rem; 
+            margin-bottom: 1rem; 
+            transition: color 0.3s ease; 
+            position: relative; 
+            z-index: 1; 
+            font-weight: 900; 
+            letter-spacing: 0.5px; 
         }
 
-        .btn-play {
-            background-color: transparent;
-            color: var(--primary-accent);
-            border: 2px solid var(--primary-accent);
-            padding: 1.2rem 2.5rem;
-            font-size: 1.05rem;
-            font-weight: 900;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: inline-block;
-            width: 100%;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
+        .game-card:hover .game-title { 
+            color: var(--primary-accent); 
         }
 
-        .btn-play:hover {
-            background-color: var(--primary-accent);
+        .game-desc { 
+            font-size: 1rem; 
+            color: var(--text-muted); 
+            line-height: 1.6; 
+            margin-bottom: 2rem; 
+            flex-grow: 1; 
+            position: relative; 
+            z-index: 1; 
+            font-weight: 500; 
+        }
+        
+        .btn-play { 
+            background-color: transparent; 
+            color: var(--primary-accent); 
+            border: 2px solid var(--primary-accent); 
+            padding: 1.2rem 2.5rem; 
+            font-size: 1.05rem; 
+            font-weight: 900; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            display: inline-block; 
+            width: 100%; 
+            position: relative; 
+            z-index: 1; 
+            overflow: hidden; 
+        }
+
+        .btn-play:hover { 
+            background-color: var(--primary-accent); 
             color: #0f172a; 
-            box-shadow: 0 15px 30px rgba(251, 191, 36, 0.4);
-            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(251, 191, 36, 0.4); 
+            transform: translateY(-2px); 
         }
 
-        body:not(.dark-mode) .btn-play:hover { color: #ffffff; }
-
-        /* MODAL E INTERFACES DE IMERSÃO */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.98);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            transition: background 0.5s ease;
+        body:not(.dark-mode) .btn-play:hover { 
+            color: #ffffff; 
         }
 
-        /* Máscara de Vinheta do Modo Cinema Extremo */
-        .modal-overlay.cinema-mode-active {
-            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(2,6,23,1) 90%);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+        /* MODAL CINEMA MODE */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(15, 23, 42, 0.98); 
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
+            transition: background 0.5s ease; 
         }
 
-        .modal-content {
-            background-color: #000;
-            border: 2px solid var(--primary-accent);
-            border-radius: 16px;
+        .modal-overlay.cinema-mode-active { 
+            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(2,6,23,1) 90%); 
+            backdrop-filter: blur(40px); 
+            -webkit-backdrop-filter: blur(40px); 
+        }
+
+        .modal-content { 
+            background-color: #000; 
+            border: 2px solid var(--primary-accent); 
+            border-radius: 16px; 
             padding: 0; 
-            width: 98%;
-            max-width: 1800px;
-            height: 96vh;
-            text-align: center;
-            position: relative;
-            animation: entradaTriunfal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            box-shadow: 0 0 100px var(--primary-accent);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: box-shadow 0.6s ease, border-color 0.6s ease;
+            width: 98%; 
+            max-width: 1800px; 
+            height: 96vh; 
+            text-align: center; 
+            position: relative; 
+            animation: entradaTriunfal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            box-shadow: 0 0 100px var(--primary-accent); 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            transition: box-shadow 0.6s ease, border-color 0.6s ease; 
         }
 
-        /* Flash de Estúdio / Alta Exposição Ouro do Modo Cinema */
-        .modal-content.cinema-lighting {
-            border-color: #fbbf24 !important;
-            box-shadow: 0 0 150px rgba(251, 191, 36, 0.95), inset 0 0 40px rgba(251, 191, 36, 0.3) !important;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 2.5rem;
-            color: #ffffff;
-            background: rgba(255,255,255,0.1);
-            width: 50px;
-            height: 50px;
-            line-height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 9999;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-
-        .close-modal:hover {
-            color: #ffffff;
-            background: var(--secondary-accent);
-            border-color: var(--secondary-accent);
-            transform: rotate(90deg) scale(1.1);
-            box-shadow: 0 0 20px var(--secondary-accent);
-        }
-
-        /* Botão Interativo do Modo Cinema */
-        .cinema-toggle-btn {
-            position: absolute;
-            top: 15px;
-            left: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            padding: 0.6rem 1.4rem;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 800;
-            font-size: 0.9rem;
-            z-index: 9999;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .cinema-toggle-btn:hover {
-            background: #fbbf24;
-            color: #020617;
-            border-color: #fbbf24;
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
-            transform: scale(1.05);
+        .modal-content.cinema-lighting { 
+            border-color: #fbbf24 !important; 
+            box-shadow: 0 0 150px rgba(251, 191, 36, 0.95), inset 0 0 40px rgba(251, 191, 36, 0.3) !important; 
         }
         
-        .cinema-toggle-btn.active {
-            background: #fbbf24;
-            color: #020617;
-            border-color: #fbbf24;
+        .close-modal { 
+            position: absolute; 
+            top: 15px; 
+            right: 25px; 
+            font-size: 2.5rem; 
+            color: #ffffff; 
+            background: rgba(255,255,255,0.1); 
+            width: 50px; 
+            height: 50px; 
+            line-height: 45px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 9999; 
+            border: 2px solid rgba(255,255,255,0.2); 
         }
 
-        .loader-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .loader {
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid var(--primary-accent);
-            border-right: 5px solid var(--secondary-accent);
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .game-frame {
-            width: 100%;
-            height: 100%;
-            flex-grow: 1;
-            border: none;
-            background-color: #000;
-            position: relative;
-            z-index: 20;
+        .close-modal:hover { 
+            color: #ffffff; 
+            background: var(--secondary-accent); 
+            border-color: var(--secondary-accent); 
+            transform: rotate(90deg) scale(1.1); 
+            box-shadow: 0 0 20px var(--secondary-accent); 
         }
         
-        .games-counter {
-            color: var(--primary-accent);
-            font-size: 1.2rem;
-            margin-top: -2.5rem;
-            margin-bottom: 3rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 0.35s;
-            opacity: 0;
-            text-align: center;
-            text-transform: uppercase;
-            text-shadow: 0 5px 15px var(--shadow-color);
-            will-change: transform, opacity;
+        .cinema-toggle-btn { 
+            position: absolute; 
+            top: 15px; 
+            left: 25px; 
+            background: rgba(255, 255, 255, 0.1); 
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+            color: #ffffff; 
+            padding: 0.6rem 1.4rem; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 800; 
+            font-size: 0.9rem; 
+            z-index: 9999; 
+            transition: all 0.3s ease; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
         }
 
-        .discord-btn {
-            position: fixed;
-            bottom: 35px;
-            right: 35px;
-            background-color: #5865F2;
-            color: white;
-            border-radius: 50%;
-            width: 75px;
-            height: 75px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 38px;
-            box-shadow: 0 10px 25px rgba(88, 101, 242, 0.5);
-            cursor: pointer;
-            z-index: 999;
-            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-            animation: entradaTriunfal 1.5s ease forwards, pulseDiscord 2s infinite 2s;
-            border: 4px solid #ffffff;
-            will-change: transform, box-shadow;
+        .cinema-toggle-btn:hover { 
+            background: #fbbf24; 
+            color: #020617; 
+            border-color: #fbbf24; 
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.6); 
+            transform: scale(1.05); 
         }
 
-        .discord-btn:hover {
-            transform: scale(1.2) translateY(-8px) rotate(-10deg);
-            box-shadow: 0 20px 40px rgba(88, 101, 242, 0.7);
-            background-color: #4752C4;
-            border-color: #e2e8f0;
+        .cinema-toggle-btn.active { 
+            background: #fbbf24; 
+            color: #020617; 
+            border-color: #fbbf24; 
         }
 
-        @keyframes pulseDiscord {
-            0% { box-shadow: 0 0 0 0 rgba(88, 101, 242, 0.8); }
-            70% { box-shadow: 0 0 0 25px rgba(88, 101, 242, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(88, 101, 242, 0); }
+        .loader-container { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            z-index: 10; 
+        }
+
+        .loader { 
+            border: 5px solid rgba(255, 255, 255, 0.1); 
+            border-top: 5px solid var(--primary-accent); 
+            border-right: 5px solid var(--secondary-accent); 
+            border-radius: 50%; 
+            width: 80px; 
+            height: 80px; 
+            animation: spin 1s linear infinite; 
+        }
+
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+
+        .game-frame { 
+            width: 100%; 
+            height: 100%; 
+            flex-grow: 1; 
+            border: none; 
+            background-color: #000; 
+            position: relative; 
+            z-index: 20; 
+        }
+        
+        .games-counter { 
+            color: var(--primary-accent); 
+            font-size: 1.2rem; 
+            margin-top: -2.5rem; 
+            margin-bottom: 3rem; 
+            font-weight: 900; 
+            letter-spacing: 4px; 
+            animation: entradaTriunfal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            animation-delay: 0.35s; 
+            opacity: 0; 
+            text-align: center; 
+            text-transform: uppercase; 
+            text-shadow: 0 5px 15px var(--shadow-color); 
+            will-change: transform, opacity; 
+        }
+
+        .discord-btn { 
+            position: fixed; 
+            bottom: 35px; 
+            right: 35px; 
+            background-color: #5865F2; 
+            color: white; 
+            border-radius: 50%; 
+            width: 75px; 
+            height: 75px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 38px; 
+            box-shadow: 0 10px 25px rgba(88, 101, 242, 0.5); 
+            cursor: pointer; 
+            z-index: 999; 
+            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            text-decoration: none; 
+            animation: entradaTriunfal 1.5s ease forwards, pulseDiscord 2s infinite 2s; 
+            border: 4px solid #ffffff; 
+            will-change: transform, box-shadow; 
+        }
+
+        .discord-btn:hover { 
+            transform: scale(1.2) translateY(-8px) rotate(-10deg); 
+            box-shadow: 0 20px 40px rgba(88, 101, 242, 0.7); 
+            background-color: #4752C4; 
+            border-color: #e2e8f0; 
+        }
+
+        @keyframes pulseDiscord { 
+            0% { box-shadow: 0 0 0 0 rgba(88, 101, 242, 0.8); } 
+            70% { box-shadow: 0 0 0 25px rgba(88, 101, 242, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(88, 101, 242, 0); } 
         }
     </style>
 </head>
-<body>
+<body class="dark-mode">
 
-    <div id="perfHud" class="performance-hud">⚙️ PERF HUD: <span id="fpsVal">--</span> FPS</div>
+    <div id="perfHud" class="performance-hud"><span id="fpsVal">--</span> FPS</div>
 
-    <button id="themeToggle" class="theme-toggle">
-        <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
-    </button>
+    <div class="top-controls">
+        <button id="btnInstallPwa" class="btn-top btn-install">📥 Instalar App</button>
+        <button id="themeToggle" class="btn-top">
+            <span id="themeIcon">☀️</span> <span id="themeText">Modo Claro</span>
+        </button>
+    </div>
 
     <canvas id="particles-canvas"></canvas>
 
     <header>
         <div id="clock-display">00:00</div>
-        <div id="greeting-msg">Carregando painel táctico...</div>
+        <div id="greeting-msg">Carregando painel tático...</div>
         <h1>STEVIN GAMES</h1>
-        <p>A Maior Plataforma Imersiva de Jogos da Web</p>
+        <p>Motor de Alta Performance (DOM Virtual & PWA Ativos)</p>
     </header>
 
-    <div class="games-counter" id="gamesCounter">Iniciando Motor e Conectando IndexedDB...</div>
+    <div class="games-counter" id="gamesCounter">Iniciando Motor Virtual...</div>
 
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por título, categoria ou estilo...">
     </div>
 
     <div class="filters" id="filterContainer">
-        <button class="filter-btn active" data-filter="all">Todos os 1000 Jogos</button>
-        <button class="filter-btn btn-fav" data-filter="fav">⭐ Meus Favoritos</button>
+        <button class="filter-btn active" data-filter="all">Todos os Jogos</button>
+        <button class="filter-btn btn-fav" data-filter="fav">⭐ Favoritos</button>
         <button class="filter-btn" data-filter="clickjogos">Friv & Click Jogos</button>
         <button class="filter-btn" data-filter="fps">Ação & FPS</button>
         <button class="filter-btn" data-filter="anime">Anime & Ninja</button>
@@ -708,18 +779,52 @@
     <div class="container" id="gamesContainer">
         </div>
 
-    <a href="#" class="discord-btn" title="Junte-se à comunidade Stevin Games no Discord!">💬</a>
+    <a href="#" class="discord-btn" title="Junte-se à comunidade!">💬</a>
 
     <div class="modal-overlay" id="gameModal">
         <div class="modal-content" id="modalContent">
             <button class="cinema-toggle-btn" id="cinemaToggle">🎬 Modo Cinema</button>
             <span class="close-modal" id="closeModal">&times;</span>
-            <div id="modalBody" style="display: flex; flex-direction: column; flex-grow: 1; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative;">
-                </div>
+            <div id="modalBody" style="display: flex; flex-direction: column; flex-grow: 1; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative;"></div>
         </div>
     </div>
 
     <script>
+        // ==========================================
+        // REGISTRO DO SERVICE WORKER (PWA CACHE EXTREMO)
+        // ==========================================
+        let deferredPrompt;
+        const installBtn = document.getElementById('btnInstallPwa');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => {
+                        console.log('Service Worker Registrado: Modo Offline Ativo', reg);
+                    })
+                    .catch(err => {
+                        console.error('Erro no SW:', err);
+                    });
+            });
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'flex'; // Exibe o botão de instalar
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             
             // ==========================================
@@ -727,14 +832,12 @@
             // ==========================================
             let lastTime = performance.now();
             let frameCount = 0;
-            let fps = 0;
             const fpsValEl = document.getElementById('fpsVal');
 
             function calculatePerformance(time) {
                 frameCount++;
-                if (time > lastTime + 500) { // Atualiza a cada meio segundo para precisão estável
-                    fps = Math.round((frameCount * 1000) / (time - lastTime));
-                    fpsValEl.textContent = fps;
+                if (time > lastTime + 500) {
+                    fpsValEl.textContent = Math.round((frameCount * 1000) / (time - lastTime));
                     frameCount = 0;
                     lastTime = time;
                 }
@@ -742,16 +845,8 @@
             }
             requestAnimationFrame(calculatePerformance);
 
-            // Atalho de Teclado F2 para Ocultar/Exibir o HUD
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'F2') {
-                    const hud = document.getElementById('perfHud');
-                    hud.style.display = hud.style.display === 'none' ? 'block' : 'none';
-                }
-            });
-
             // ==========================================
-            // RELÓGIO E SAUDAÇÃO PERSONALIZADA (LIMPA SEM NOME)
+            // RELÓGIO E SAUDAÇÃO
             // ==========================================
             function updateClock() {
                 const now = new Date();
@@ -760,8 +855,11 @@
                 document.getElementById('clock-display').textContent = `${hours}:${minutes}`;
 
                 let greeting = "Boa noite";
-                if (now.getHours() >= 5 && now.getHours() < 12) greeting = "Bom dia";
-                else if (now.getHours() >= 12 && now.getHours() < 18) greeting = "Boa tarde";
+                if (now.getHours() >= 5 && now.getHours() < 12) {
+                    greeting = "Bom dia";
+                } else if (now.getHours() >= 12 && now.getHours() < 18) {
+                    greeting = "Boa tarde";
+                }
                 
                 document.getElementById('greeting-msg').textContent = `${greeting}. Bem-vindo de volta ao comando.`;
             }
@@ -783,378 +881,366 @@
                 themeText.textContent = isDark ? 'Modo Claro' : 'Modo Escuro';
                 
                 particlesArray.forEach(p => {
-                    if (isDark) {
-                        p.color = Math.random() > 0.5 ? '#fbbf24' : '#f59e0b'; 
-                    } else {
-                        p.color = Math.random() > 0.5 ? '#4F46E5' : '#EC4899'; 
-                    }
+                    p.color = isDark ? (Math.random() > 0.5 ? '#fbbf24' : '#f59e0b') : (Math.random() > 0.5 ? '#4F46E5' : '#EC4899');
                 });
             });
 
             // ==========================================
-            // SISTEMA DE PARTÍCULAS
+            // SISTEMA DE PARTÍCULAS 
             // ==========================================
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
             let particlesArray = [];
             let isOriginalModalOpen = false;
 
-            canvas.width = window.innerWidth;
+            canvas.width = window.innerWidth; 
             canvas.height = window.innerHeight;
-
-            const mouse = { x: null, y: null, radius: 180 }
-            window.addEventListener('mousemove', function(event) {
-                mouse.x = event.x; mouse.y = event.y;
+            
+            const mouse = { 
+                x: null, 
+                y: null, 
+                radius: 180 
+            }
+            
+            window.addEventListener('mousemove', e => { 
+                mouse.x = e.x; 
+                mouse.y = e.y; 
             });
-            window.addEventListener('resize', function() {
-                canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-                initParticles();
+            
+            window.addEventListener('resize', () => { 
+                canvas.width = window.innerWidth; 
+                canvas.height = window.innerHeight; 
+                initParticles(); 
             });
 
             class Particle {
                 constructor(x, y, directionX, directionY, size, color) {
-                    this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
+                    this.x = x; 
+                    this.y = y; 
+                    this.directionX = directionX; 
+                    this.directionY = directionY; 
+                    this.size = size; 
+                    this.color = color;
                 }
-                draw() {
-                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle = this.color; ctx.fill();
+                
+                draw() { 
+                    ctx.beginPath(); 
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); 
+                    ctx.fillStyle = this.color; 
+                    ctx.fill(); 
                 }
+                
                 update() {
-                    if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
-                    if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
-
-                    let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                    if (this.x > canvas.width || this.x < 0) {
+                        this.directionX = -this.directionX;
+                    }
+                    if (this.y > canvas.height || this.y < 0) {
+                        this.directionY = -this.directionY;
+                    }
+                    
+                    let dx = mouse.x - this.x; 
+                    let dy = mouse.y - this.y;
                     let distance = Math.sqrt(dx*dx + dy*dy);
                     
                     if (distance < mouse.radius) {
-                        if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 2;
-                        if (mouse.x > this.x && this.x > this.size * 10) this.x -= 2;
-                        if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 2;
-                        if (mouse.y > this.y && this.y > this.size * 10) this.y -= 2;
+                        if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+                            this.x += 2;
+                        }
+                        if (mouse.x > this.x && this.x > this.size * 10) {
+                            this.x -= 2;
+                        }
+                        if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+                            this.y += 2;
+                        }
+                        if (mouse.y > this.y && this.y > this.size * 10) {
+                            this.y -= 2;
+                        }
                     }
-                    this.x += this.directionX; this.y += this.directionY;
+                    
+                    this.x += this.directionX; 
+                    this.y += this.directionY;
                     this.draw();
                 }
             }
-
+            
             function initParticles() {
                 particlesArray = [];
-                let numberOfParticles = (canvas.height * canvas.width) / 10000; 
+                let num = (canvas.height * canvas.width) / 10000; 
                 const isDark = document.body.classList.contains('dark-mode');
-
-                for (let i = 0; i < numberOfParticles; i++) {
+                
+                for (let i = 0; i < num; i++) {
                     let size = (Math.random() * 3) + 1;
                     let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
                     let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                    let directionX = (Math.random() * 0.8) - 0.4; let directionY = (Math.random() * 0.8) - 0.4;
                     let color = isDark ? (Math.random() > 0.5 ? '#fbbf24' : '#f59e0b') : (Math.random() > 0.5 ? '#4F46E5' : '#EC4899'); 
-                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                    particlesArray.push(new Particle(x, y, (Math.random() * 0.8) - 0.4, (Math.random() * 0.8) - 0.4, size, color));
                 }
             }
-
+            
             function animateParticles() {
                 requestAnimationFrame(animateParticles);
                 if (!isOriginalModalOpen) {
                     ctx.clearRect(0, 0, innerWidth, innerHeight);
-                    for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); }
+                    for (let i = 0; i < particlesArray.length; i++) {
+                        particlesArray[i].update();
+                    }
                     connectParticles();
                 }
             }
-
+            
             function connectParticles() {
-                let opacityValue = 1;
                 const isDark = document.body.classList.contains('dark-mode');
-                const rgbColor = isDark ? '251, 191, 36' : '79, 70, 229';
-
+                const rgb = isDark ? '251, 191, 36' : '79, 70, 229';
+                
                 for (let a = 0; a < particlesArray.length; a++) {
                     for (let b = a; b < particlesArray.length; b++) {
-                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                            + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                        if (distance < (canvas.width / 9) * (canvas.height / 9)) {
-                            opacityValue = 1 - (distance / 18000);
-                            ctx.strokeStyle = `rgba(${rgbColor}, ${opacityValue * 0.2})`;
+                        let dist = ((particlesArray[a].x - particlesArray[b].x) ** 2) + ((particlesArray[a].y - particlesArray[b].y) ** 2);
+                        if (dist < (canvas.width / 9) * (canvas.height / 9)) {
+                            ctx.strokeStyle = `rgba(${rgb}, ${(1 - (dist / 18000)) * 0.2})`;
                             ctx.lineWidth = 1.2;
-                            ctx.beginPath();
-                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.beginPath(); 
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y); 
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y); 
                             ctx.stroke();
                         }
                     }
                 }
             }
-            initParticles();
+            
+            initParticles(); 
             animateParticles();
 
             // ==========================================
-            // INDEXED DB - SISTEMA DE FAVORITOS NATIVO
+            // INDEXED DB - FAVORITOS
             // ==========================================
             let db;
             let myFavorites = new Set();
             const dbRequest = indexedDB.open("StevinGames_DB", 1);
-
-            dbRequest.onupgradeneeded = function(e) {
-                db = e.target.result;
+            
+            dbRequest.onupgradeneeded = e => { 
+                db = e.target.result; 
                 if (!db.objectStoreNames.contains("favorites")) {
-                    db.createObjectStore("favorites", { keyPath: "title" });
+                    db.createObjectStore("favorites", { keyPath: "title" }); 
                 }
             };
-
-            dbRequest.onsuccess = function(e) {
-                db = e.target.result;
-                loadFavoritesFromDB();
+            
+            dbRequest.onsuccess = e => { 
+                db = e.target.result; 
+                loadFavoritesFromDB(); 
             };
 
             function loadFavoritesFromDB() {
-                const transaction = db.transaction(["favorites"], "readonly");
-                const store = transaction.objectStore("favorites");
-                const request = store.getAll();
-
-                request.onsuccess = function() {
-                    const data = request.result;
-                    data.forEach(item => myFavorites.add(item.title));
+                db.transaction(["favorites"], "readonly").objectStore("favorites").getAll().onsuccess = function() {
+                    this.result.forEach(item => myFavorites.add(item.title));
                     generateGamesAndRender();
                 };
             }
 
-            window.toggleFav = function(event, title) {
-                event.stopPropagation(); 
-                const starEl = event.currentTarget;
-                const transaction = db.transaction(["favorites"], "readwrite");
-                const store = transaction.objectStore("favorites");
-
-                if (myFavorites.has(title)) {
-                    myFavorites.delete(title);
-                    store.delete(title);
-                    starEl.classList.remove('active');
-                    starEl.innerHTML = '☆';
-                } else {
-                    myFavorites.add(title);
-                    store.put({ title: title, savedAt: new Date().toISOString() });
-                    starEl.classList.add('active');
-                    starEl.innerHTML = '⭐';
-                }
-
-                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-                if(activeFilter === 'fav') {
-                    document.querySelector('[data-filter="fav"]').click();
-                }
-            };
-
             // ==========================================
-            // MOTOR PROCEDURAL 1000 JOGOS + LENDAS CLICK JOGOS / FRIV
+            // MOTOR PROCEDURAL 1000 JOGOS
             // ==========================================
             const gamesDatabase = [];
             
             function generateGamesAndRender() {
                 const proxy = "https://wsrv.nl/?url=";
-                
                 const initialGames = [
-                    { title: "Papa's Burgeria", icon: "🍔", desc: "A lenda do Click Jogos! Anote pedidos, asse hambúrgueres e sirva os clientes no tempo certo.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "clickjogos", cover: proxy + "images.crazygames.com/papas-burgeria/cover-1586285189392.png" },
-                    { title: "Bad Ice-Cream", icon: "🍦", desc: "Clássico da Nitrome. Sopre paredes de gelo e colete frutas desviando dos monstros.", url: "https://gamesnacks.com/embed/games/elementblocks", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
-                    { title: "Moto X3M Clássico", icon: "🏍️", desc: "O mais famoso jogo de motocross do Friv. Faça manobras incríveis e desvie de serras giratórias.", url: "https://gamesnacks.com/embed/games/retrodrift", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/moto-x3m/cover-1586285096181.png" },
-                    { title: "Fireboy & Watergirl: Forest", icon: "🔥💧", desc: "A aventura cooperativa suprema do Click Jogos. Coordene os elementos pelos labirintos abertos.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png" },
-                    { title: "Snail Bob (Bob O Caracol)", icon: "🐌", desc: "Resolva quebra-cabeças mecânicos para guiar o caracol em segurança até a saída.", url: "https://gamesnacks.com/embed/games/bouncemasters", cat: "clickjogos", cover: proxy + "www.gamesnacks.com/assets/img/games/bouncemasters/bouncemasters.jpg" },
-                    { title: "Vex 3 Retro", icon: "🏃", desc: "Pule, deslize e sobreviva a labirintos letais de espinhos neste clássico jogo de parkour estilo Friv.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/vex-3/cover-1586285096181.png" },
-                    { title: "Bob The Robber", icon: "🦹", desc: "Esconda-se nas sombras, desative câmeras de segurança e roube tesouros neste clássico furtivo.", url: "https://gamesnacks.com/embed/games/chessclassic", cat: "clickjogos", cover: proxy + "www.gamesnacks.com/assets/img/games/chessclassic/chessclassic.jpg" },
-                    { title: "Subway Surfers Web", icon: "🛹", desc: "Corra pelos trilhos e colete moedas de ouro sem parar. Sem instalação.", url: "https://eggycar.github.io/subwaysurfers/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg" },
-                    { title: "Stick War Legacy", icon: "🏹", desc: "Estratégia pura. Construa seu exército de homens-palito e destrua a estátua inimiga.", url: "https://gamesnacks.com/embed/games/towercrash3d", cat: "io", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/310560/header.jpg" },
-                    { title: "Cut the Rope / Om Nom", icon: "🐸", desc: "Corte as cordas no tempo exato para alimentar o monstrinho verde com os doces.", url: "https://gamesnacks.com/embed/games/omnomrun", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1182480/header.jpg" },
-                    { title: "Tomb Runner (Temple Clone)", icon: "🏃‍♂️", desc: "Corra por muralhas antigas e colete relíquias em alta velocidade.", url: "https://gamesnacks.com/embed/games/trainsurfers", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg" },
-                    { title: "Venge.io", icon: "🔫", desc: "Um dos melhores jogos de tiro multijogador focados em objetivos da web.", url: "https://venge.io/", cat: "fps", cover: proxy + "i.ytimg.com/vi/W4k0r-k9yT0/maxresdefault.jpg" },
-                    { title: "Ev.io Arena", icon: "🎯", desc: "Atirador FPS futurista no estilo Halo, rápido e direto no navegador.", url: "https://ev.io/", cat: "fps", cover: proxy + "ev.io/sites/default/files/2021-02/evio_promo.jpg" },
-                    { title: "Shell Shockers", icon: "🥚", desc: "Jogo de tiro em primeira pessoa multijogador hilário onde você é um ovo armado.", url: "https://shellshock.io/", cat: "fps", cover: proxy + "shellshock.io/img/EggIcon.png" },
-                    { title: "2048 Oficial", icon: "🧩", desc: "O clássico e viciante puzzle matemático de juntar blocos.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "upload.wikimedia.org/wikipedia/commons/1/18/2048_logo.svg" },
-                    { title: "Hextris Global", icon: "🕹️", desc: "Mova a base hexagonal e evite que os blocos atinjam as bordas.", url: "https://hextris.io/", cat: "io", cover: proxy + "hextris.io/images/facebook-promo.png" },
-                    { title: "Flappy Bird", icon: "🐦", desc: "O jogo mais frustrante e viciante da internet. Voe pelos canos.", url: "https://flappybird.io/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/470220/header.jpg" },
-                    { title: "Minecraft Classic", icon: "⛏️", desc: "A versão web oficial do Minecraft. Construa e destrua blocos infinitamente.", url: "https://classic.minecraft.net/", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" }
+                    { title: "Papa's Burgeria", icon: "🍔", desc: "A lenda do Click Jogos! Anote pedidos, asse hambúrgueres e sirva os clientes no tempo certo.", url: "https://gamesnacks.com/embed/games/candyfiesta", cat: "clickjogos", cover: proxy + "images.crazygames.com/papas-burgeria/cover-1586285189392.png", device: "Ambos" },
+                    { title: "Moto X3M Clássico", icon: "🏍️", desc: "O mais famoso jogo de motocross do Friv. Faça manobras incríveis.", url: "https://gamesnacks.com/embed/games/retrodrift", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/moto-x3m/cover-1586285096181.png", device: "Ambos" },
+                    { title: "Fireboy & Watergirl", icon: "🔥💧", desc: "A aventura cooperativa suprema do Click Jogos.", url: "https://mkings.github.io/fireboy-watergirl/", cat: "clickjogos", cover: proxy + "images.crazygames.com/games/fireboy-and-watergirl-the-forest-temple/cover-1586285096181.png", device: "PC" },
+                    { title: "Venge.io", icon: "🔫", desc: "Um dos melhores jogos de tiro multijogador focados em objetivos da web.", url: "https://venge.io/", cat: "fps", cover: proxy + "i.ytimg.com/vi/W4k0r-k9yT0/maxresdefault.jpg", device: "PC" },
+                    { title: "Ev.io Arena", icon: "🎯", desc: "Atirador FPS futurista no estilo Halo, rápido e direto no navegador.", url: "https://ev.io/", cat: "fps", cover: proxy + "ev.io/sites/default/files/2021-02/evio_promo.jpg", device: "PC" },
+                    { title: "Subway Surfers Web", icon: "🛹", desc: "Corra pelos trilhos e colete moedas de ouro sem parar. Sem instalação.", url: "https://eggycar.github.io/subwaysurfers/", cat: "clickjogos", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/322330/header.jpg", device: "Ambos" },
+                    { title: "Minecraft Classic", icon: "⛏️", desc: "A versão web oficial do Minecraft. Construa e destrua blocos.", url: "https://classic.minecraft.net/", cat: "aventura", cover: proxy + "cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg", device: "PC" },
+                    { title: "2048 Oficial", icon: "🧩", desc: "O clássico e viciante puzzle matemático de juntar blocos.", url: "https://gabrielecirulli.github.io/2048/", cat: "puzzle", cover: proxy + "upload.wikimedia.org/wikipedia/commons/1/18/2048_logo.svg", device: "Ambos" },
                 ];
                 
                 gamesDatabase.push(...initialGames);
 
-                const imageLibrary = [
-                    "730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520", "322170", 
-                    "1086940", "230410", "4000", "236390", "1091500", "292030", "1245620", "383150", "220", "17390", 
-                    "322330", "1097150", "1182480", "311210", "620", "504230", "10", "518060", "470220", "431960"
-                ];
-
-                const prefixes = ["Elite", "Papa's", "Super", "Stickman", "Ghost", "Ninja", "Friv", "Pocket", "Grand", "Cyber", "Neon", "Retro", "Dark", "Crystal", "Royal"];
-                const nouns = ["Strike", "Burgeria", "Ops", "Kombat", "Arena", "Dash", "Royale", "Legends", "World", "City", "Sword", "Fashion", "Run", "Shooter"];
-                const suffixes = ["Online", "3D", "Pro", "Elite", "Max", "Simulator", "V", "X", "Zero", "Infinity", "Showdown"];
-
+                const imageLibrary = ["730", "578080", "1172470", "440", "105600", "252490", "570", "271590", "367520"];
+                const prefixes = ["Elite", "Super", "Ninja", "Friv", "Pocket", "Grand", "Cyber", "Dark"];
+                const nouns = ["Strike", "Arena", "Dash", "Legends", "World", "Sword", "Run", "Shooter"];
+                
                 const validLinks = {
-                    fps: ["https://ev.io/", "https://venge.io/", "https://smashkarts.io/", "https://shellshock.io/", "https://krunker.io/"],
-                    io: ["https://hextris.io/", "https://agar.io/", "https://slither.io/", "https://hole-io.com/", "https://gamesnacks.com/embed/games/towercrash3d"],
-                    puzzle: ["https://gabrielecirulli.github.io/2048/", "https://skribbl.io/", "https://gamesnacks.com/embed/games/elementblocks"],
-                    anime: ["https://ev.io/", "https://venge.io/"],
-                    clickjogos: ["https://flappybird.io/", "https://eggycar.github.io/subwaysurfers/", "https://mkings.github.io/fireboy-watergirl/", "https://gamesnacks.com/embed/games/retrodrift"],
-                    aventura: ["https://classic.minecraft.net/", "https://gamesnacks.com/embed/games/bouncemasters"],
-                    arcade: ["https://hextris.io/", "https://flappybird.io/", "https://gamesnacks.com/embed/games/trafficrun"]
+                    fps: { url: "https://ev.io/", dev: "PC" },
+                    io: { url: "https://hole-io.com/", dev: "Ambos" },
+                    clickjogos: { url: "https://eggycar.github.io/subwaysurfers/", dev: "Ambos" },
+                    arcade: { url: "https://hextris.io/", dev: "Ambos" }
                 };
-
-                const catPool = ["fps", "fps", "aventura", "arcade", "io", "puzzle", "anime", "clickjogos", "clickjogos"];
+                
+                const catPool = ["fps", "arcade", "io", "clickjogos"];
 
                 let count = gamesDatabase.length;
                 
                 while (count < 1000) {
-                    const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
-                    const nou = nouns[Math.floor(Math.random() * nouns.length)];
-                    const suf = suffixes[Math.floor(Math.random() * suffixes.length)];
-                    const generatedName = `${pre} ${nou} ${suf} ${count}`; 
-                    
                     const randomCat = catPool[Math.floor(Math.random() * catPool.length)];
-                    const categoryLinks = validLinks[randomCat];
-                    const randomUrl = categoryLinks[Math.floor(Math.random() * categoryLinks.length)];
-                    const randomImageId = imageLibrary[count % imageLibrary.length];
-
-                    let icon = "🎮";
-                    let desc = "Motor aberto, sem bloqueios. Jogue diretamente do seu navegador com alta performance.";
-                    let coverGenerated = proxy + `cdn.akamai.steamstatic.com/steam/apps/${randomImageId}/header.jpg`;
-
-                    if(randomCat === 'fps') { 
-                        icon = "🔫"; desc = "Gatilho rápido! Servidores multijogador em tempo real, sem instalação."; 
-                    } else if(randomCat === 'io') { 
-                        icon = "🌐"; desc = "Conquiste território, bata recordes mundiais e domine a arena aberta."; 
-                    } else if(randomCat === 'anime') { 
-                        icon = "⚔️"; desc = "Lute como os maiores ninjas e heróis das sagas japonesas."; 
-                    } else if(randomCat === 'puzzle') { 
-                        icon = "🧩"; desc = "Lógica e matemática no navegador. Mova as peças e vença o desafio."; 
-                    } else if(randomCat === 'clickjogos') { 
-                        icon = "🕹️"; desc = "A lenda do Click Jogos. Casual, de carregamento rápido e extremamente viciante."; 
-                    } else if(randomCat === 'aventura') {
-                        icon = "🗺️"; desc = "Mundos de blocos e mistérios abertos esperando para serem explorados por você.";
-                    } else if(randomCat === 'arcade') {
-                        icon = "🕹️"; desc = "Fliperama raiz. Tente alcançar a pontuação máxima nas máquinas da web.";
-                    }
-
+                    const target = validLinks[randomCat];
+                    
                     gamesDatabase.push({
-                        title: generatedName,
-                        icon: icon,
-                        desc: desc,
-                        url: randomUrl,
+                        title: `${prefixes[count % prefixes.length]} ${nouns[count % nouns.length]} ${count}`,
+                        icon: "🎮",
+                        desc: "Motor aberto, sem bloqueios. Jogue diretamente do seu navegador.",
+                        url: target.url,
                         cat: randomCat,
-                        cover: coverGenerated
+                        cover: proxy + `cdn.akamai.steamstatic.com/steam/apps/${imageLibrary[count % imageLibrary.length]}/header.jpg`,
+                        device: target.dev
                     });
+                    
                     count++;
                 }
-
-                renderGames(gamesDatabase);
+                
+                renderVirtualGrid(gamesDatabase);
             }
 
+            // ==========================================
+            // MOTOR DE VIRTUALIZAÇÃO DE DOM (WINDOWING)
+            // ==========================================
             const container = document.getElementById('gamesContainer');
             const gamesCounter = document.getElementById('gamesCounter');
-            
             const fallbackImage = "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=600&q=80";
+            let currentFilteredGames = [];
 
-            const scrollObserver = new IntersectionObserver((entries, observer) => {
+            // O observador que recicla a memória destruindo e criando HTML pesado dinamicamente
+            const virtualObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
+                    const slot = entry.target;
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('show');
-                        observer.unobserve(entry.target); 
+                        const gameIndex = slot.getAttribute('data-index');
+                        const game = currentFilteredGames[gameIndex];
+                        if (game && slot.innerHTML === '') {
+                            slot.innerHTML = generateCardHTML(game);
+                        }
+                    } else {
+                        // Limpa a RAM instantaneamente quando sai da tela
+                        slot.innerHTML = '';
                     }
                 });
-            }, { root: null, threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+            }, { root: null, rootMargin: "600px 0px" });
 
-            function renderGames(games) {
-                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-                if(activeFilter === 'fav') {
-                    gamesCounter.textContent = `${games.length} Favoritos Salvos no Banco Local`;
-                } else {
-                    gamesCounter.textContent = `${games.length} Jogos Famosos (Click Jogos & Friv Integrados)`;
-                }
+            function generateCardHTML(game) {
+                let catLabel = game.cat === 'fps' ? 'Ação & FPS' : game.cat === 'io' ? 'IO' : game.cat === 'clickjogos' ? 'Click Jogos' : 'Arcade';
+                const isFav = myFavorites.has(game.title);
+                const devIcon = game.device === 'PC' ? '💻 PC' : game.device === 'Mobile' ? '📱 Mobile' : '💻📱 Ambos';
+                const devClass = game.device === 'PC' ? 'device-pc' : 'device-mobile';
 
-                let htmlString = '';
-
-                games.forEach((game, index) => {
-                    let catLabel = 'Casual';
-                    if(game.cat === 'fps') catLabel = 'Ação & FPS';
-                    else if(game.cat === 'io') catLabel = 'Estratégia IO';
-                    else if(game.cat === 'anime') catLabel = 'Anime & Ninja';
-                    else if(game.cat === 'puzzle') catLabel = 'Puzzle';
-                    else if(game.cat === 'clickjogos') catLabel = 'Friv Hits';
-                    else if(game.cat === 'aventura') catLabel = 'Aventura';
-                    else if(game.cat === 'arcade') catLabel = 'Arcade';
-
-                    const isFav = myFavorites.has(game.title);
-
-                    htmlString += `
-                        <div class="game-card">
-                            <div class="game-cover">
-                                <div class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFav(event, '${game.title}')" title="Salvar nos Favoritos">
-                                    ${isFav ? '⭐' : '☆'}
-                                </div>
-                                <img src="${game.cover}" onerror="this.onerror=null; this.src='${fallbackImage}';" alt="Capa de ${game.title}" loading="lazy">
-                                <div class="category-tag">${catLabel}</div>
+                return `
+                    <div class="game-card">
+                        <div class="game-cover">
+                            <div class="fav-star ${isFav ? 'active' : ''}" data-title="${game.title}" title="Favoritos">
+                                ${isFav ? '⭐' : '☆'}
                             </div>
-                            <div class="game-content">
-                                <div>
-                                    <h2 class="game-title">${game.icon} ${game.title}</h2>
-                                    <p class="game-desc">${game.desc}</p>
-                                </div>
-                                <button class="btn-play" data-url="${game.url}">▶ Jogar Online</button>
+                            <img src="${game.cover}" onerror="this.onerror=null; this.src='${fallbackImage}';" loading="lazy">
+                            <div class="category-tag">${catLabel}</div>
+                            <div class="device-tags">
+                                <span class="device-badge ${devClass}">${devIcon}</span>
                             </div>
                         </div>
-                    `;
-                });
-                
-                container.innerHTML = htmlString;
-                
-                document.querySelectorAll('.game-card').forEach(card => {
-                    scrollObserver.observe(card);
-                });
-
-                attachPlayEvents();
+                        <div class="game-content">
+                            <div>
+                                <h2 class="game-title">${game.icon} ${game.title}</h2>
+                                <p class="game-desc">${game.desc}</p>
+                            </div>
+                            <button class="btn-play" data-url="${game.url}">▶ Jogar Online</button>
+                        </div>
+                    </div>
+                `;
             }
+
+            function renderVirtualGrid(games) {
+                currentFilteredGames = games;
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                gamesCounter.textContent = `${games.length} Jogos Renderizados (DOM Virtual Ativo)`;
+                
+                container.innerHTML = ''; // Limpa slots antigos
+                virtualObserver.disconnect();
+
+                // Cria slots ocos super leves para a Grid CSS calcular a rolagem perfeita
+                games.forEach((game, index) => {
+                    const slot = document.createElement('div');
+                    slot.className = 'game-card-wrapper';
+                    slot.setAttribute('data-index', index);
+                    container.appendChild(slot);
+                    virtualObserver.observe(slot);
+                });
+            }
+
+            // Delegação de Eventos (Padrão de arquitetura para DOM Virtualizado)
+            container.addEventListener('click', (e) => {
+                const playBtn = e.target.closest('.btn-play');
+                const favStar = e.target.closest('.fav-star');
+
+                if (playBtn) {
+                    const gameUrl = playBtn.getAttribute('data-url');
+                    isOriginalModalOpen = true; 
+                    
+                    modalBody.innerHTML = `
+                        <div class="loader-container" id="modalLoaderContainer">
+                            <div class="loader"></div>
+                            <p style="color: var(--primary-accent); margin-top: 25px; font-weight: 900; font-size: 1.3rem; text-transform: uppercase;">Conectando...</p>
+                        </div>
+                        <iframe src="${gameUrl}" class="game-frame" allow="fullscreen; autoplay; gamepad;" frameborder="0" onload="document.getElementById('modalLoaderContainer').style.display='none';"></iframe>
+                    `;
+                    modal.style.display = 'flex';
+                }
+
+                if (favStar) {
+                    const title = favStar.getAttribute('data-title');
+                    const transaction = db.transaction(["favorites"], "readwrite");
+                    const store = transaction.objectStore("favorites");
+
+                    if (myFavorites.has(title)) {
+                        myFavorites.delete(title);
+                        store.delete(title);
+                        favStar.classList.remove('active');
+                        favStar.innerHTML = '☆';
+                    } else {
+                        myFavorites.add(title);
+                        store.put({ title: title, savedAt: new Date().toISOString() });
+                        favStar.classList.add('active');
+                        favStar.innerHTML = '⭐';
+                    }
+                    
+                    if(document.querySelector('.filter-btn.active').getAttribute('data-filter') === 'fav') {
+                        document.querySelector('[data-filter="fav"]').click();
+                    }
+                }
+            });
 
             // ==========================================
             // OTIMIZAÇÃO DE BUSCA E FILTROS
             // ==========================================
             const searchInput = document.getElementById('searchInput');
             let searchTimeout;
-
+            
             searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-                
                 clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    const filtered = gamesDatabase.filter(game => {
-                        const matchesSearch = game.title.toLowerCase().includes(searchTerm) || game.desc.toLowerCase().includes(searchTerm);
-                        
-                        let matchesFilter = false;
-                        if(activeFilter === 'all') matchesFilter = true;
-                        else if(activeFilter === 'fav') matchesFilter = myFavorites.has(game.title);
-                        else matchesFilter = game.cat === activeFilter;
-
-                        return matchesSearch && matchesFilter;
-                    });
-                    renderGames(filtered);
-                }, 300);
+                searchTimeout = setTimeout(() => applyFilters(), 300);
             });
 
             const filterBtns = document.querySelectorAll('.filter-btn');
+            
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-
-                    const filterValue = btn.getAttribute('data-filter');
-                    const searchTerm = searchInput.value.toLowerCase();
-
-                    const filtered = gamesDatabase.filter(game => {
-                        let matchesFilter = false;
-                        if(filterValue === 'all') matchesFilter = true;
-                        else if(filterValue === 'fav') matchesFilter = myFavorites.has(game.title);
-                        else matchesFilter = game.cat === filterValue;
-
-                        const matchesSearch = game.title.toLowerCase().includes(searchTerm) || game.desc.toLowerCase().includes(searchTerm);
-                        return matchesFilter && matchesSearch;
-                    });
-                    
-                    renderGames(filtered);
+                    applyFilters();
                 });
             });
 
+            function applyFilters() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                
+                const filtered = gamesDatabase.filter(game => {
+                    let mFilter = activeFilter === 'all' ? true : activeFilter === 'fav' ? myFavorites.has(game.title) : game.cat === activeFilter;
+                    const mSearch = game.title.toLowerCase().includes(searchTerm) || game.desc.toLowerCase().includes(searchTerm);
+                    return mFilter && mSearch;
+                });
+                
+                renderVirtualGrid(filtered);
+            }
+
             // ==========================================
-            // MOTOR DE MODAL COM SUPORTE A MODO CINEMA
+            // MODAL CINEMA MODE
             // ==========================================
             const modal = document.getElementById('gameModal');
             const modalContent = document.getElementById('modalContent');
@@ -1162,44 +1248,11 @@
             const cinemaToggleBtn = document.getElementById('cinemaToggle');
             const modalBody = document.getElementById('modalBody');
 
-            function attachPlayEvents() {
-                const playButtons = document.querySelectorAll('.btn-play');
-                playButtons.forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const gameUrl = e.target.getAttribute('data-url');
-                        isOriginalModalOpen = true; 
-
-                        modalBody.innerHTML = `
-                            <div class="loader-container" id="modalLoaderContainer">
-                                <div class="loader"></div>
-                                <p style="color: var(--primary-accent); margin-top: 25px; font-weight: 900; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 3px;">Conectando ao Jogo...</p>
-                            </div>
-                            <iframe 
-                                src="${gameUrl}" 
-                                class="game-frame" 
-                                allow="fullscreen; autoplay; gamepad; pointer-lock; clipboard-write; display-capture; microphone" 
-                                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock"
-                                frameborder="0"
-                                scrolling="yes"
-                                onload="document.getElementById('modalLoaderContainer').style.display='none';">
-                            </iframe>
-                        `;
-                        modal.style.display = 'flex';
-                    });
-                });
-            }
-
-            // Ação do Botão do Modo Cinema
             cinemaToggleBtn.addEventListener('click', () => {
                 modal.classList.toggle('cinema-mode-active');
                 modalContent.classList.toggle('cinema-lighting');
                 cinemaToggleBtn.classList.toggle('active');
-                
-                if (cinemaToggleBtn.classList.contains('active')) {
-                    cinemaToggleBtn.textContent = "🎬 Foco Ativo";
-                } else {
-                    cinemaToggleBtn.textContent = "🎬 Modo Cinema";
-                }
+                cinemaToggleBtn.textContent = cinemaToggleBtn.classList.contains('active') ? "🎬 Foco Ativo" : "🎬 Modo Cinema";
             });
 
             function resetCinemaMode() {
@@ -1209,20 +1262,20 @@
                 cinemaToggleBtn.textContent = "🎬 Modo Cinema";
             }
 
-            closeModalBtn.addEventListener('click', () => {
-                modal.style.display = 'none';
+            closeModalBtn.addEventListener('click', () => { 
+                modal.style.display = 'none'; 
                 modalBody.innerHTML = ''; 
                 isOriginalModalOpen = false; 
-                resetCinemaMode();
+                resetCinemaMode(); 
             });
-
-            window.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                    modalBody.innerHTML = '';
-                    isOriginalModalOpen = false;
-                    resetCinemaMode();
-                }
+            
+            window.addEventListener('click', (e) => { 
+                if (e.target === modal) { 
+                    modal.style.display = 'none'; 
+                    modalBody.innerHTML = ''; 
+                    isOriginalModalOpen = false; 
+                    resetCinemaMode(); 
+                } 
             });
         });
     </script>
